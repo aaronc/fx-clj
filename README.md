@@ -82,7 +82,7 @@ To use fx-clj and core.async together, use something like this:
 There are three macros for interacting with the JavaFX application
 thread - each providing slightly different asynchronous behavior:
 `run!`, `run<!` and `run<!!`. For those familiar with core.async, these
-correspond roughly to the behavior of `put!`, `<!` and `<!!`
+correspond to the behavior of `put!`, `<!` and `<!!`
 respectively.
 
 `run!` send a block of code to be run asynchronously on the JavaFX
@@ -125,6 +125,23 @@ from a thread other than the JavaFX application thread it runs
 asynchronously without blocking the caller and returns `nil`).
 
 TODO: maybe pset should always return `nil`??
+
+The signature for `pset!` is the following:
+
+```clojure
+(defn pset! id-class-keyword? property-map? children-content*)
+```
+
+`id-class-keyword?`: an *optional* keyword parameter taking the form
+of :#my-id.my-class.my-class1 that will set the node's id and
+styleClass properties to the specified values.
+
+`property-map?`: an *optional* map of properties to set on the object.
+
+`children-content*`: 0 or more items to be set on the objects
+DefaultProperty. If the default property is a List property (like
+children or items) there can be any number of elements. If it is a
+property taking a singular value (like content), there can be only one element.
 
 ### Creating JavaFX objects
 
