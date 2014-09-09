@@ -1,18 +1,17 @@
 (ns fx-clj.core
   (:require
-    [fx-clj.impl.bootstrap]
-    [fx-clj.util :as util]
-    [clojure.core.async :refer [chan put! go <! >! <!! >!!]]
-    [camel-snake-kebab.core :refer [->SNAKE_CASE_STRING ->camelCaseString
-                                    ->CamelCaseString]])
-  (:import (javafx.event EventHandler)
-           (javafx.util Callback)
-           (javafx.collections ObservableList FXCollections)
-           (javafx.scene Node)
-           (javax.swing JComponent)
-           (javafx.embed.swing SwingNode)
-           (clojure.core.async.impl.channels ManyToManyChannel)))
+    [potemkin :refer [import-vars]]
+    [fx-clj.core.run]
+    [fx-clj.core.pset]
+    [fx-clj.hiccup]
+    [fx-clj.elements]))
 
+(import-vars
+  [fx-clj.core.run run! run<! run<!!]
+  [fx-clj.core.pset pset! pset<! pset<!!]
+  [fx-clj.hiccup compile-fx])
 
-;; (defn compile [form])
+(eval
+  `(potemkin/import-vars [fx-clj.elements
+      ~@(keys (ns-publics (find-ns 'fx-clj.elements)))]))
 
