@@ -1,4 +1,5 @@
 (ns fx-clj.elements
+  (:import (javafx.scene Scene))
   (:require
     [fx-clj.impl.elements :refer [element-factories]]
     [fx-clj.core.pset :as pset]
@@ -34,3 +35,6 @@
                         :ns *ns*})]
 
     (intern *ns* sym closure)))
+
+(defn scene
+  ([root] (Scene. root)))

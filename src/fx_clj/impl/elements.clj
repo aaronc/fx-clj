@@ -44,7 +44,8 @@
            (javafx.scene.media MediaView)
            (javafx.scene.image ImageView)
            (javafx.embed.swing SwingNode)
-           (java.lang.reflect Modifier Constructor)))
+           (java.lang.reflect Modifier Constructor)
+           (javafx.stage PopupWindow Stage Popup)))
 
 (def element-factories (atom {}))
 
@@ -102,3 +103,8 @@
     ])
 
 (register-classes styleable-classes)
+
+(def window-classes
+  [PopupWindow Stage Popup])
+
+(register-classes window-classes)
