@@ -18,3 +18,7 @@
 
 (defmacro callback [arg & body]
   `(callback* (fn ~arg ~@body)))
+
+;; TODO: use java.thread uncaught ex handler
+(defn set-fx-exception-handler! [f])
+
