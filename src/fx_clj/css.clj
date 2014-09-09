@@ -6,7 +6,9 @@
            (com.sun.javafx.css StyleManager)
            (java.net URL URLStreamHandlerFactory URLStreamHandler URLConnection)
            (java.io ByteArrayInputStream FileNotFoundException)
-           (com.sun.javafx.application PlatformImpl)))
+           (com.sun.javafx.application PlatformImpl)
+           (javafx.stage Stage)
+           (javafx.scene Scene)))
 
 (defonce ^:private auto-inc (atom 0))
 
@@ -60,15 +62,15 @@
     (swap! css-strings assoc url css)
     (set-global-stylesheet! url)))
 
-(comment
-  (defn set-css! [stage css]
-    (run!
-      (let [url (URL. (str prefix ":global-" (swap! auto-inc inc)))
-            to-remove (filter #(re-matches global-url-re (str %)) (keys @css-strings))]
-        ;;(swap! css-strings (fn [x] (apply dissoc x to-remove)))
-        ;;(doseq [x to-remove] (remove-global-stylesheet! x))
-        (swap! css-strings assoc url css)
-        ;;(set-global-stylesheet! url)
-        (.clear (.getStylesheets (.getScene stage)))
-        (.add (.getStylesheets (.getScene stage)) (str url))
-        ))))
+(defn add-css! [stage-or-scene css]
+  (run!
+    (let [url (URL. (str prefix ":custom-" (swap! auto-inc inc)))
+          stylesheets
+          (cond
+            (instance? Stage stage-or-scene)
+            (.getStylesheets (.getScene stage-or-scene))
+
+            (instance? Scene stage-or-scene)
+            (.getStylesheets stage-or-scene))]
+      (swap! css-strings assoc url css)
+      (.add stylesheets (str url)))))
