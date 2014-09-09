@@ -9,7 +9,7 @@ A Clojure library for JavaFX with the following goals:
 - Work with **core.async** out of the box
 - Provide support for creating JavaFX functions with both a function
   based - `(fx/h-box (fx/button "Hello World"))` - and hiccup-like API -
-  `(fx/compile [:h-box [:button "Hello World"]])`.
+  `(fx/compile-fx [:h-box [:button "Hello World"]])`.
 
 ## Quick Start
 
@@ -21,11 +21,11 @@ COMING SOON.
 Two minute example:
 ```clojure
 (ns example
-  (:require [fx-clj.all :as fx]))
+  (:require [fx-clj.core :as fx]))
 
 (defn create-view []
   (fx/h-box
-    (fx/button {:on-action (fn [e] (println "Hello World"))
+    (fx/button {:on-action (fn [e] (println "Hello World!"))
                 :text "Click Me!"})))
 
 (fx/sandbox #'create-view) ;; Creates a "sandbox" JavaFX window to
@@ -37,28 +37,25 @@ Two minute example:
 
 Two minute core.async example:
 ```clojure
-(ns example
-  (:require [fx-clj.all :as fx])
-  (:require [clojure.core.async :as async]))
-
+(ns example2
+  (:require [fx-clj.core :as fx])
+  (:require [clojure.core.async :refer [chan go <! >!]]))
 
 (defn create-view []
-    (let [click-ch (async/chan))
-          btn (fx/button {:on-action click-ch ;; You can bind a core.async channel directly to an event
-                    :text "Click Me!"}))]
+  (let [click-ch (chan)
+        btn (fx/button {:on-action click-ch ;; You can bind a core.async channel directly to an event
+                        :text "Click Me!"})]
+    (go
+      (<! click-ch)
+      (println "Clicked the first time")
+      (<! click-ch)
+      (println "Clicked again")
+      (fx/pset<! btn {:text "Done"})
+      (println "Done listening to clicks"))
 
-      (go
-       (<! click-ch)
-       (println "Clicked the first time")
-       (<! click-ch)
-       (println "Clicked again")
-       (pset<! btn "Done")
-       (println "Done listening to clicks))
+      (fx/h-box btn)))
 
-      (fx/h-box btn))))
-
-
-(fx/sandbox #'create-view) 
+(fx/sandbox #'create-view)
 ```
 
 ## Usage
@@ -67,13 +64,13 @@ To get all of fx-clj into your namespace quickly use a namespace
 declaration like this:
 ```clojure
 (ns my-ns
-  (:require [fx-clj.all :as fx]))
+  (:require [fx-clj.core :as fx]))
 ```
 
 To use fx-clj and core.async together, use something like this:
 ```clojure
 (ns my-ns
-  (:require [fx-clj.all :as fx])
+  (:require [fx-clj.core :as fx])
   (:require [clojure.core.async :as async :refer [go go-loop chan <! >!])))
 ```
 
@@ -152,17 +149,17 @@ See the API documentation for `fx-clj.elements` for a list of
 supported JavaFX objects.
 
 The syntax for all object creation functions and the hiccup like
-vectors, is almost identical to the pset syntax. All of these are equivalent:
+vectors, is almost identical to the pset syntax. It is basically a matter of 
+which style you prefer. All of the following are equivalent:
 
 ```clojure
-(pset! (Button.) :#my-btn.my-class {:on-action (fn [] (println "Clicked")) :text "Click Me} "Click Me")
+(fx/pset! (Button.) :#my-btn.my-class {:on-action (fn [] (println "Clicked"))} "Click Me")
 
 (fx/button :#my-btn.my-class {:on-action (fn [] (println "Clicked"))} "Click Me")
 
-(fx/compile [:button#my-btn.my-class {:on-action (fn [] (println "Clicked"))}] "Click Me")
+(fx/compile-fx [:button#my-btn.my-class {:on-action (fn [] (println "Clicked"))}] "Click Me")
 ```
 
-It is basically all a matter of what style you prefer.
 
 Because the DefaultProperty of Button is `text`, it can be set as the
 argument after the property map.

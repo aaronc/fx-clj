@@ -18,7 +18,7 @@
           (try
             (f)
             (catch Throwable ex
-              (put! ch (ex-info (str "Error on JavaFX application thread") {} ex))
+              (put! ch (ex-info (str "Error on JavaFX application thread") {:cause ex} ex))
               (throw ex)                                    ;; Should this be rethrown??
               ))]
       (put! ch (if (nil? res) ::nil res)))))
@@ -38,7 +38,7 @@
  `(if (javafx.application.Platform/isFxApplicationThread)
     (do ~@body)
     (let [ch# (clojure.core.async/chan)]
-      (fx-clj.core.run/run!*
+      (javafx.application.Platform/runLater
         (fx-clj.core.run/async-run-wrapper (fn [] ~@body) ch#))
       (fx-clj.core.run/process-async-res (~take-fn ch#)))))
 

@@ -180,10 +180,10 @@
    (pset!* node args (lookup-default-property-closure (class node)))))
 
 (defmacro pset! [node & args]
-  `(fx-clj.core.run/run! (fx-clj.core.pset/pset!* ~node ~args)))
+  `(fx-clj.core.run/run! (fx-clj.core.pset/pset!* ~node ~(vec args))))
 
 (defmacro pset<! [node & args]
-  `(fx-clj.core.run/run<! ~node ~@args))
+  `(fx-clj.core.run/run<! (fx-clj.core.pset/pset!* ~node ~(vec args))))
 
 (defmacro pset<!! [node & args]
-  `(fx-clj.core.run/run<!! ~node ~@args))
+  `(fx-clj.core.run/run<!! (fx-clj.core.pset/pset!* ~node ~(vec args))))

@@ -9,12 +9,13 @@
 (defn sandbox [refresh-fn]
   (run<!!
     (let [scene (fx/scene (refresh-fn))
-          stage (fx/stage {:scene scene})]
+          stage (fx/stage)]
       (pset! scene
              {:on-key-pressed
-               (fn [e]
+               (fn do-sandbox-refresh [e]
                  (when (= KeyCode/F5 (.getCode e))
                    (pset! scene {:root (refresh-fn)})))})
+      (.setScene stage scene)
       (.initModality stage Modality/NONE)
       (.show stage)
       stage)))
