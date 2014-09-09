@@ -10,12 +10,16 @@ A Clojure library for JavaFX with the following goals:
 - Provide support for creating JavaFX functions with both a function
   based - `(fx/h-box (fx/button "Hello World"))` - and hiccup-like API -
   `(fx/compile-fx [:h-box [:button "Hello World"]])`.
+- Allow for setting JavaFX CSS from code and integrate with the garden CSS 
+  library
 
 ## Quick Start
 
 Leiningen dependeny information:
 
-COMING SOON.
+```clojure
+[fx-clj "0.1.0-SNAPSHOT"]
+```
 
 
 Two minute example:

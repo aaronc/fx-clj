@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/core.async "0.1.338.0-5c5012-alpha"]
                  [camel-snake-kebab "0.2.4"]
+                 [garden "1.2.1"]
                  [potemkin "0.3.8"]])

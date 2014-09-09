@@ -1,10 +1,12 @@
 (ns fx-clj.css
   (:require
-    [fx-clj.core.run :refer [run!]])
+    [fx-clj.core.run :refer [run!]]
+    [garden.core :as garden])
   (:import (javafx.application Application)
            (com.sun.javafx.css StyleManager)
            (java.net URL URLStreamHandlerFactory URLStreamHandler URLConnection)
-           (java.io ByteArrayInputStream FileNotFoundException)))
+           (java.io ByteArrayInputStream FileNotFoundException)
+           (com.sun.javafx.application PlatformImpl)))
 
 (defonce ^:private auto-inc (atom 0))
 
@@ -20,7 +22,6 @@
         (proxy [URLConnection] [url]
           (connect [])
           (getInputStream []
-            (println "getInputStream")
             (ByteArrayInputStream. (.getBytes css))))
         (throw (FileNotFoundException.))))))
 
@@ -29,7 +30,6 @@
     URLStreamHandlerFactory
     (createURLStreamHandler [this protocol]
       (when (= protocol prefix)
-        (println "createURLSTreamHandler")
         url-stream-handler))))
 
 (defonce ^:private init (URL/setURLStreamHandlerFactory url-stream-handler-factory))
@@ -40,16 +40,35 @@
 
 (defn set-global-stylesheet! [url]
   (run!
-    (Application/setUserAgentStylesheet url)
-    ;;(.addUserAgentStylesheet (StyleManager/getInstance) (str url))
-    ))
+    (Application/setUserAgentStylesheet nil)
+    (.addUserAgentStylesheet (StyleManager/getInstance) (str url))))
 
 (def ^:private global-url-re (re-pattern (str prefix ":global-\\d*")))
 
+(defn- ->css [css]
+  (cond
+    (string? css) css
+    (vector? css) (garden/css css)
+    :default (throw (ex-info (str "Don't know how to convert " css " to css" {:css css})))))
+
 (defn set-global-css! [css]
-  (let [url (URL. (str prefix ":global-" (swap! auto-inc inc)))
+  (let [css (->css css)
+         url (URL. (str prefix ":global-" (swap! auto-inc inc)))
         to-remove (filter #(re-matches global-url-re (str %)) (keys @css-strings))]
     (swap! css-strings (fn [x] (apply dissoc x to-remove)))
-    ;;(doseq [x to-remove] (remove-global-stylesheet! x))
+    (doseq [x to-remove] (remove-global-stylesheet! x))
     (swap! css-strings assoc url css)
     (set-global-stylesheet! url)))
+
+(comment
+  (defn set-css! [stage css]
+    (run!
+      (let [url (URL. (str prefix ":global-" (swap! auto-inc inc)))
+            to-remove (filter #(re-matches global-url-re (str %)) (keys @css-strings))]
+        ;;(swap! css-strings (fn [x] (apply dissoc x to-remove)))
+        ;;(doseq [x to-remove] (remove-global-stylesheet! x))
+        (swap! css-strings assoc url css)
+        ;;(set-global-stylesheet! url)
+        (.clear (.getStylesheets (.getScene stage)))
+        (.add (.getStylesheets (.getScene stage)) (str url))
+        ))))
