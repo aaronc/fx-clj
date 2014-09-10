@@ -15,27 +15,26 @@
       (do-transform n xform))))
 
 (defn at!
-  "An enlive-like transformation function. Takes a context node and pairs of
-  css selector strings and transform arguments.  If a single transform argument
-  is supplied after node (instead of sel-xform-pairs), that transformation will
-  be applied to the provided node.
+"An enlive-like transformation function. Takes a context node and pairs of
+css selector strings and transform arguments.  If a single transform argument
+is supplied after node (instead of sel-xform-pairs), that transformation will
+be applied to the provided node.
 
-  Available transforms include:
-    the property-map transform: a map that could be passed to [[pset!]]
-    [[add-class!]]
-    [[remove-class!]]
+Available transforms include:
+- the property-map transform: a map that could be passed to [[pset!]]
+- [[add-class!]]
+- [[remove-class!]]
 
-  Examples:
+Examples:
 
-  ```clojure
-  (at! my-node \"#my-element\" {:text \"Some text\"})
-  (at! my-node \"#my-element\" (add-class! \"some-class\"))
-  (at! my-node {:text \"Some text\"})
-  ```
+```clojure
+(at! my-node \"#my-element\" {:text \"Some text\"})
+(at! my-node \"#my-element\" (add-class! \"some-class\"))
+(at! my-node {:text \"Some text\"})
+```
 
-  Note: Additional transforms can be registered (see the
-  fx-clj.core.extensibility namespace for details).
-  "
+Note: Additional transforms can be registered (see the
+fx-clj.core.extensibility namespace for details)."
   {:doc/format :markdown}
   [node & sel-xform-pairs]
   (if (= 1 (count sel-xform-pairs))
