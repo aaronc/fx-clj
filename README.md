@@ -1,4 +1,4 @@
-**[Guide](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)**
+**[Guide](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[Source](http://github.com/aaronc/fx-clj)** | **[License](https://raw.githubusercontent.com/aaronc/fx-clj/master/LICENSE)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)**
 
 [![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
