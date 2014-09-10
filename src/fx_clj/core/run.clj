@@ -2,6 +2,7 @@
   (:require
     [fx-clj.impl.bootstrap]
     [clojure.core.async :refer [go put! chan <!]])
+  (:refer-clojure :exclude [run!])
   (:import (javafx.application Platform)))
 
 (defn run!* [f]

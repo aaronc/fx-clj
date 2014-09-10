@@ -30,6 +30,10 @@
            [_ v {:keys [element-type] :or {element-type Object}}]
   (FXCollections/observableList (for [x v] (convert-arg element-type x nil))))
 
+(prefer-method convert-arg
+               [ObservableList clojure.lang.Sequential]
+               [Object clojure.lang.PersistentVector])
+
 (defmethod convert-arg [Node JComponent] [nt jc _]
   (doto (SwingNode.)
     (.setContent jc)))

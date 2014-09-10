@@ -6,6 +6,8 @@
     [fx-clj.core.run :refer [run<!!]]
     [fx-clj.core.pset :refer [pset!]]))
 
+(def ^:private auto-inc (atom 0))
+
 (defn sandbox
   "Creates a JavaFX stage with the root element of the stage's scene set to
   the result of evaluating refresh-fn. If F5 is pressed within the stage,
@@ -19,7 +21,7 @@
   ;; By binding to a var,  my-refresh-fn can be  easily updated and reloaded
   ;; at the REPL"
 
-  [refresh-fn]
+  [refresh-fn & {:keys [title] :or {title (str "Sandbox" (swap! auto-inc inc))}}]
   (run<!!
     (let [scene (fx/scene (refresh-fn))
           stage (fx/stage)]
@@ -30,5 +32,6 @@
                    (pset! scene {:root (refresh-fn)})))})
       (.setScene stage scene)
       (.initModality stage Modality/NONE)
+      (pset! stage {:title title})
       (.show stage)
       stage)))

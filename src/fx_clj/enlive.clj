@@ -2,7 +2,7 @@
   (:require
     [fx-clj.core.extensibility :refer [do-transform]]
     [fx-clj.core.pset :as pset]
-    [fx-clj.core.run :refer [run!]]
+    [fx-clj.core.run :as run]
     [fx-clj.core.transforms]))
 
 (defmethod do-transform clojure.lang.PersistentArrayMap
@@ -10,7 +10,7 @@
   (pset/do-pset!* node prop-map nil nil))
 
 (defn- invoke-transform [node selector xform]
-  (let [nodes (.lookupAll node selector)]
+  (let [nodes (.lookupAll node (name selector))]
     (doseq [n nodes]
       (do-transform n xform))))
 
@@ -21,6 +21,7 @@ is supplied after node (instead of sel-xform-pairs), that transformation will
 be applied to the provided node.
 
 Available transforms include:
+
 - the property-map transform: a map that could be passed to [[pset!]]
 - [[add-class!]]
 - [[remove-class!]]
@@ -37,8 +38,9 @@ Note: Additional transforms can be registered (see the
 fx-clj.core.extensibility namespace for details)."
   {:doc/format :markdown}
   [node & sel-xform-pairs]
-  (if (= 1 (count sel-xform-pairs))
-    (do-transform node (first sel-xform-pairs))
-    (doseq [[selector xform] (partition 2 sel-xform-pairs)]
-      (invoke-transform node selector xform))))
+  (run/run!
+    (if (= 1 (count sel-xform-pairs))
+      (do-transform node (first sel-xform-pairs))
+      (doseq [[selector xform] (partition 2 sel-xform-pairs)]
+        (invoke-transform node selector xform)))))
 

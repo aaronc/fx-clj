@@ -1,6 +1,6 @@
 (ns ^:no-doc fx-clj.css
   (:require
-    [fx-clj.core.run :refer [run!]]
+    [fx-clj.core.run :as run]
     [garden.core :as garden])
   (:import (javafx.application Application)
            (com.sun.javafx.css StyleManager)
@@ -37,7 +37,7 @@
 (defonce ^:private init (URL/setURLStreamHandlerFactory url-stream-handler-factory))
 
 (defn remove-global-stylesheet! [url]
-  (run!
+  (run/run!
     (.removeUserAgentStylesheet (StyleManager/getInstance) (str url))))
 
 (defn set-global-stylesheet! [url]
@@ -67,7 +67,7 @@
     (set-global-stylesheet! url)))
 
 (defn add-css! [stage-or-scene css]
-  (run!
+  (run/run!
     (let [url (URL. (str prefix ":custom-" (swap! auto-inc inc)))
           stylesheets
           (cond

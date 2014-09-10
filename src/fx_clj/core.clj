@@ -1,4 +1,5 @@
 (ns fx-clj.core
+  (:refer-clojure :exclude [run!])
   (:require
     [potemkin :refer [import-vars]]
     [fx-clj.core.run]
@@ -23,7 +24,7 @@
   [fx-clj.css set-global-css!]
   [fx-clj.core.i18n with-locale with-resource-bundle
    get-resource-bundle get-locale get-resource]
-  [fx-clj.util event-handler callback])
+  [fx-clj.util event-handler callback lookup])
 
 (defn import-all [ns-sym]
   (eval

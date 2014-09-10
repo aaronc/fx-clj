@@ -26,3 +26,12 @@
    :doc/format :markdown}
   [arg & body]
   `(callback* (fn ~arg ~@body)))
+
+;;(defn get-scene [node] (.getScene node))
+
+;;(defn get-root [node] (.getRoot (.getScene node)))
+
+(defn lookup
+  "Looks up a CSS selector string (or keyword) on a JavaFX Scene or Node."
+  [scene-or-node selector]
+  (.lookup scene-or-node (name selector)))

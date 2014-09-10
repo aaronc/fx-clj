@@ -1,6 +1,6 @@
 (ns ^:no-doc fx-clj.core.pset
   (:require
-    [fx-clj.core.run]
+    [fx-clj.core.run :as run]
     [fx-clj.core.convert]
     [fx-clj.core.extensibility :refer [convert-arg]]
     [camel-snake-kebab.core :as csk]
@@ -198,4 +198,4 @@
   'content' element or can be bound."
   {:arglists '([element id-class-kw? property-map? & content-or-children*])}
   [element & args]
-  (fx-clj.core.pset/pset!* element args))
+  (run/run! (pset!* element args)))

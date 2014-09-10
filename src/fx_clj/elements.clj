@@ -14,8 +14,7 @@
   (let [def-prop-closure
         (pset/lookup-default-property-closure cls)]
     (fn create-element [& args]
-      (run/run<!!
-        (pset/pset!* (factory) args def-prop-closure)))))
+      (pset/pset!* (factory) args def-prop-closure))))
 
 (doseq [[ename factory] @element-factories]
   (let [cls

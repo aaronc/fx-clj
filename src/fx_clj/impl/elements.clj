@@ -26,7 +26,7 @@
                                  SeparatorMenuItem Slider SplitMenuButton
                                  SplitPane Tab TableCell TableColumn
                                  TableColumnBase TableRow TableView TabPane
-                                 TextArea)
+                                 TextArea TreeItem)
            (javafx.scene.chart BarChart Axis AreaChart BubbleChart CategoryAxis
                                Chart XYChart ValueAxis PieChart NumberAxis
                                LineChart ScatterChart StackedAreaChart
@@ -108,3 +108,8 @@
   [PopupWindow Stage Popup])
 
 (register-classes window-classes)
+
+(def other-classes
+  [TreeItem])
+
+(register-classes other-classes)
