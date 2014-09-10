@@ -1,4 +1,8 @@
-**[API docs](http://aaronc.github.io/fx-clj/)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)**
+**[README](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)**
+
+```clojure
+[fx-clj "0.1.0-SNAPSHOT"]
+```
 
 WORK IN PROGRESS. Not ready yet!
 
@@ -20,9 +24,6 @@ A Clojure library for JavaFX with the following goals:
 
 Leiningen dependeny information:
 
-```clojure
-[fx-clj "0.1.0-SNAPSHOT"]
-```
 
 
 Two minute example:
