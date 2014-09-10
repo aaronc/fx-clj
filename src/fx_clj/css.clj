@@ -53,7 +53,11 @@
     (vector? css) (garden/css css)
     :default (throw (ex-info (str "Don't know how to convert " css " to css" {:css css})))))
 
-(defn set-global-css! [css]
+(defn set-global-css!
+  "Sets the provided css as the global css for all JavaFX windows without
+  overriding the default JavaFX css. css can either be a css string or a
+  vector that can be processed by the garden css library."
+  [css]
   (let [css (->css css)
          url (URL. (str prefix ":global-" (swap! auto-inc inc)))
         to-remove (filter #(re-matches global-url-re (str %)) (keys @css-strings))]

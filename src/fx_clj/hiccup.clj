@@ -24,11 +24,14 @@
     (pset/set-id+classes node id class-list)
     node))
 
-(defn compile-fx* [[elem-kw & args]]
+(defn compile-fx
+  "A hiccup-style element creation function.
+  Takes a vector of the form [:tag-name#my-id.my-class property-map? content-or-children*]
+  property-map? and content-or-children* are as in pset!.
+  This function has more or less the same exact syntax as hiccup does for HTML,
+  except for JavaFX."
+  [[elem-kw & args]]
   (pset/pset!** (fx-clj.hiccup/hiccup-construct elem-kw) args))
-
-(defmacro compile-fx [form]
-  `(fx-clj.core.run/run<!! (fx-clj.hiccup/compile-fx* ~form)))
 
 (defmethod convert-arg [Object clojure.lang.PersistentVector] [_ v opts]
   (compile-fx v))

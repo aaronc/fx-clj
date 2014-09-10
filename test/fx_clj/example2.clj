@@ -5,15 +5,19 @@
 (defn create-view []
   (let [click-ch (chan)
         btn (fx/button :#my-btn {:on-action click-ch ;; You can bind a core.async channel directly to an event
-                        :text "Click Me!"})]
+                        :text "Next"})
+
+        txt (fx/text "Initial text")
+        view (fx/v-box txt btn)]
     (go
       (<! click-ch)
-      (println "Clicked the first time")
+      (fx/run<! (fx/pset! txt "Next text"))
       (<! click-ch)
-      (println "Clicked again")
-      (fx/pset<! btn {:text "Done"})
+      (fx/run<!
+        (fx/pset! txt "Last text")
+        (fx/pset! btn {:text "Done"}))
       (println "Done listening to clicks"))
 
-    (fx/h-box btn)))
+    view))
 
 (def s0 (fx/sandbox #'create-view))

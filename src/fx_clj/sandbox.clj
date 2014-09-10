@@ -6,7 +6,20 @@
     [fx-clj.core.run :refer [run<!!]]
     [fx-clj.core.pset :refer [pset!]]))
 
-(defn sandbox [refresh-fn]
+(defn sandbox
+  "Creates a JavaFX stage with the root element of the stage's scene set to
+  the result of evaluating refresh-fn. If F5 is pressed within the stage,
+  refresh-fn will be re-evaluated and its new result will be bound to as the
+  root of the scene. This can be very useful for prototyping.
+
+  Suggested usage:
+
+  (defn my-refresh-fn [] (do-create-view....))
+  (sandbox #'my-refresh-fn)
+  ;; By binding to a var,  my-refresh-fn can be  easily updated and reloaded
+  ;; at the REPL"
+
+  [refresh-fn]
   (run<!!
     (let [scene (fx/scene (refresh-fn))
           stage (fx/stage)]

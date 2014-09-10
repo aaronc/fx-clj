@@ -4,10 +4,11 @@
     [fx-clj.impl.elements :refer [element-factories]]
     [fx-clj.core.pset :as pset]
     [fx-clj.core.run :as run]
+    [fx-clj.impl.util :refer [javadoc-link]]
     [camel-snake-kebab.core :as csk]))
 
 (def ^:private
-  default-arglists '([id-class-kw? property-map? content-or-children*]))
+  default-arglists '([id-class-kw? property-map? & content-or-children*]))
 
 (defn- create-element-closure [cls factory]
   (let [def-prop-closure
@@ -22,7 +23,8 @@
          (meta factory))
 
         doc-string
-        (str "Creates an instance of " cls ". Arguments processed as in pset!.")
+        (str "Creates an instance of " (javadoc-link cls)
+             ".\nArguments processed as in [[pset!]].")
 
         closure (create-element-closure cls factory)
 
@@ -30,6 +32,7 @@
 
         sym (with-meta sym
                        {:doc doc-string
+                        :doc/format :markdown
                         :arglists default-arglists
                         :name sym
                         :ns *ns*})]
@@ -37,4 +40,6 @@
     (intern *ns* sym closure)))
 
 (defn scene
+  {:doc (str "Creates an instance of " (javadoc-link Scene) " with the specified root node.")
+   :doc/format :markdown}
   ([root] (Scene. root)))

@@ -179,11 +179,22 @@
   ([node args]
    (pset!* node args (lookup-default-property-closure (class node)))))
 
-(defmacro pset! [node & args]
-  `(fx-clj.core.run/run! (fx-clj.core.pset/pset!* ~node ~(vec args))))
+(defn pset!
+  "Sets properties on elements.
 
-(defmacro pset<! [node & args]
-  `(fx-clj.core.run/run<! (fx-clj.core.pset/pset!* ~node ~(vec args))))
+  id-class-kw? (optional): a keyword representing a hiccup style ID and
+  classes (i.e. :#some-id.some-class.another-class).
 
-(defmacro pset<!! [node & args]
-  `(fx-clj.core.run/run<!! (fx-clj.core.pset/pset!* ~node ~(vec args))))
+  property-map? (optional): a map of property keys and setters. Keys can be
+  kebab-case keywords corresponding to JavaFX bean properties. Values are
+  converted using clojurefx.core.convert/convert-arg. If a value is an
+  instance of ObservableValue (or is converted to one),
+  it will be bound to the property.
+
+  content-or-children* (zeror more): element or elements to be bound to the
+  JavaFX element's DefaultProperty. If the DefaultProperty is a list property
+  then multiple children elements can be bound, otherwise only a single
+  'content' element  can be bound."
+  {:arglists '([element id-class-kw? property-map? & content-or-children*])}
+  [element & args]
+  (fx-clj.core.pset/pset!* element args))

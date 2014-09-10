@@ -14,7 +14,17 @@
     (doseq [n nodes]
       (do-transform n xform))))
 
-(defn at [node & sel-xform-pairs]
+(defn at
+  "An enlive-like transformation function.
+  Takes a context node and pairs of css selector strings
+  and transform arguments. Currently the only supported transform
+  is the property map transform (a property map that could be passed to pset!.
+
+  Example: (at my-node \"#my-element\" {:text \"Some text\"})
+
+  Note: additional transforms can be registered using the
+  fx-clj.enlive/do-transform multimethod."
+  [node & sel-xform-pairs]
   (run!
     (doseq [[selector xform] (partition 2 sel-xform-pairs)]
       (invoke-transform node selector xform))))
