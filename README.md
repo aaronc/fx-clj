@@ -2,9 +2,11 @@
 
 [![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
-Alpha quality: there may be lots of breaking changes.
+Alpha quality: there may be lots of breaking changes. JDK 8 required.
 
-## Goals
+## Overview
+
+A Clojure library for JavaFX 8 with the following goals:
 
 - Provide convenience functions for creating and modifying JavaFX
   objects without attempting to completely hide the JavaFX API
@@ -18,10 +20,12 @@ Alpha quality: there may be lots of breaking changes.
   library
 - Helper functions for **i18n**
 
-## Getting Started
+## Quick Start
 
-To get all of fx-clj into your namespace quickly use a namespace
-declaration like this:
+Make sure you have installed [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and have lein configured to use it. See the leiningen [sample.project.clj](https://github.com/technomancy/leiningen/blob/master/sample.project.clj) and search for `LEIN_JAVA_CMD`, `:java-cmd` and `JAVA_CMD` to see different ways to do this.
+
+Add the leiningen dependency to your project listed above and a namespace declaration similar to the following to your code:
+
 ```clojure
 (ns my-ns
   (:require [fx-clj.core :as fx]))
@@ -72,7 +76,7 @@ A quick example for integrating `fx-clj` and `core.async`:
 (fx/sandbox #'create-view)
 ```
 
-
+## Usage
 
 ### Interacting with the JavaFX application thread
 
