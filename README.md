@@ -4,7 +4,7 @@
 
 Alpha quality: there may be lots of breaking changes.
 
-A Clojure library for JavaFX with the following goals:
+## Goals
 
 - Provide convenience functions for creating and modifying JavaFX
   objects without attempting to completely hide the JavaFX API
@@ -18,13 +18,16 @@ A Clojure library for JavaFX with the following goals:
   library
 - Helper functions for **i18n**
 
-## Quick Start
+## Getting Started
 
-Leiningen dependeny information:
+To get all of fx-clj into your namespace quickly use a namespace
+declaration like this:
+```clojure
+(ns my-ns
+  (:require [fx-clj.core :as fx]))
+```
 
-
-
-Two minute example:
+A "hello world" example:
 ```clojure
 (ns example
   (:require [fx-clj.core :as fx]))
@@ -41,7 +44,7 @@ Two minute example:
 
 ```
 
-Two minute core.async example:
+A quick example for integrating `fx-clj` and `core.async`:
 ```clojure
 (ns example2
   (:require [fx-clj.core :as fx])
@@ -49,36 +52,27 @@ Two minute core.async example:
 
 (defn create-view []
   (let [click-ch (chan)
-        btn (fx/button {:on-action click-ch ;; You can bind a core.async channel directly to an event
-                        :text "Click Me!"})]
+        btn (fx/button :#my-btn {:on-action click-ch ;; You can bind a core.async channel directly to an event
+                        :text "Next"})
+
+        txt (fx/text "Initial text")
+        view (fx/v-box txt btn)]
+        
     (go
       (<! click-ch)
-      (println "Clicked the first time")
+      (fx/run<! (fx/pset! txt "Next text"))
       (<! click-ch)
-      (println "Clicked again")
-      (fx/pset<! btn {:text "Done"})
+      (fx/run<!
+        (fx/pset! txt "Last text")
+        (fx/pset! btn {:text "Done"}))
       (println "Done listening to clicks"))
 
-      (fx/h-box btn)))
+    view))
 
 (fx/sandbox #'create-view)
 ```
 
-## Usage
 
-To get all of fx-clj into your namespace quickly use a namespace
-declaration like this:
-```clojure
-(ns my-ns
-  (:require [fx-clj.core :as fx]))
-```
-
-To use fx-clj and core.async together, use something like this:
-```clojure
-(ns my-ns
-  (:require [fx-clj.core :as fx])
-  (:require [clojure.core.async :as async :refer [go go-loop chan <! >!])))
-```
 
 ### Interacting with the JavaFX application thread
 
