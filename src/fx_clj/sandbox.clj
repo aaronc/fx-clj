@@ -1,4 +1,4 @@
-(ns fx-clj.sandbox
+(ns ^:no-doc fx-clj.sandbox
   (:import (javafx.scene.input KeyCode)
            (javafx.stage Modality))
   (:require

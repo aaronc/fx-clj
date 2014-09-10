@@ -1,4 +1,4 @@
-(ns fx-clj.hiccup
+(ns ^:no-doc fx-clj.hiccup
   (:require
     [fx-clj.core.pset :as pset]
     [fx-clj.impl.elements :refer [element-factories]]

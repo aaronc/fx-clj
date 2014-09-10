@@ -1,4 +1,4 @@
-(ns fx-clj.enlive
+(ns ^:no-doc fx-clj.enlive
   (:require
     [fx-clj.core.pset :as pset]
     [fx-clj.core.run :refer [run!]]))

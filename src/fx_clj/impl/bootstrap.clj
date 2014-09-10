@@ -1,4 +1,4 @@
-(ns fx-clj.impl.bootstrap)
+(ns ^:no-doc fx-clj.impl.bootstrap)
 
 ;; From clojurefx.core:
 (defonce force-toolkit-init (javafx.embed.swing.JFXPanel.))

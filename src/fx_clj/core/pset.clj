@@ -1,4 +1,4 @@
-(ns fx-clj.core.pset
+(ns ^:no-doc fx-clj.core.pset
   (:require
     [fx-clj.core.run]
     [fx-clj.core.convert :refer [convert-arg]]

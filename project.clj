@@ -7,4 +7,8 @@
                  [org.clojure/core.async "0.1.338.0-5c5012-alpha"]
                  [camel-snake-kebab "0.2.4"]
                  [garden "1.2.1"]
-                 [potemkin "0.3.8"]])
+                 [potemkin "0.3.8"]]
+  :profiles
+  {:dev
+    {:plugins
+      [[codox "0.8.10"]]}})

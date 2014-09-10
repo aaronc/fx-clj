@@ -1,4 +1,4 @@
-(ns fx-clj.core.run
+(ns ^:no-doc fx-clj.core.run
   (:require
     [fx-clj.impl.bootstrap]
     [clojure.core.async :refer [go put! chan <!]])

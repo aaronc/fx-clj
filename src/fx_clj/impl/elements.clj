@@ -1,4 +1,4 @@
-(ns fx-clj.impl.elements
+(ns ^:no-doc fx-clj.impl.elements
   (:require
     [fx-clj.impl.bootstrap])
   (:import (javafx.scene.control.cell CheckBoxTreeCell CheckBoxTreeTableCell

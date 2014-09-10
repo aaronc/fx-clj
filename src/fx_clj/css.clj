@@ -1,4 +1,4 @@
-(ns fx-clj.css
+(ns ^:no-doc fx-clj.css
   (:require
     [fx-clj.core.run :refer [run!]]
     [garden.core :as garden])

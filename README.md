@@ -14,6 +14,7 @@ A Clojure library for JavaFX with the following goals:
   FXML resources**)
 - Allow for setting JavaFX CSS from code and integrate with the **garden CSS**
   library
+- Helper functions for **i18n**
 
 ## Quick Start
 

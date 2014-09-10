@@ -1,4 +1,4 @@
-(ns fx-clj.elements
+(ns ^:no-doc fx-clj.elements
   (:import (javafx.scene Scene))
   (:require
     [fx-clj.impl.elements :refer [element-factories]]
