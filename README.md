@@ -1,10 +1,12 @@
-**[Guide](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)**
+**[Guide](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[Source](http://github.com/aaronc/fx-clj)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)** | **[License](https://raw.githubusercontent.com/aaronc/fx-clj/master/LICENSE)**
 
 [![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
-Alpha quality: there may be lots of breaking changes.
+Alpha quality: there may be lots of breaking changes. JDK 8 required.
 
-A Clojure library for JavaFX with the following goals:
+## Overview
+
+A Clojure library for JavaFX 8 with the following goals:
 
 - Provide convenience functions for creating and modifying JavaFX
   objects without attempting to completely hide the JavaFX API
@@ -20,11 +22,16 @@ A Clojure library for JavaFX with the following goals:
 
 ## Quick Start
 
-Leiningen dependeny information:
+Make sure you have installed [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and have lein configured to use it. See the leiningen [sample.project.clj](https://github.com/technomancy/leiningen/blob/master/sample.project.clj) and search for `LEIN_JAVA_CMD`, `:java-cmd` and `JAVA_CMD` to see different ways to do this.
 
+Add the leiningen dependency to your project listed above and a namespace declaration similar to the following to your code:
 
+```clojure
+(ns my-ns
+  (:require [fx-clj.core :as fx]))
+```
 
-Two minute example:
+A "hello world" example:
 ```clojure
 (ns example
   (:require [fx-clj.core :as fx]))
@@ -41,7 +48,7 @@ Two minute example:
 
 ```
 
-Two minute core.async example:
+A quick example for integrating `fx-clj` and `core.async`:
 ```clojure
 (ns example2
   (:require [fx-clj.core :as fx])
@@ -49,36 +56,27 @@ Two minute core.async example:
 
 (defn create-view []
   (let [click-ch (chan)
-        btn (fx/button {:on-action click-ch ;; You can bind a core.async channel directly to an event
-                        :text "Click Me!"})]
+        btn (fx/button :#my-btn {:on-action click-ch ;; You can bind a core.async channel directly to an event
+                        :text "Next"})
+
+        txt (fx/text "Initial text")
+        view (fx/v-box txt btn)]
+        
     (go
       (<! click-ch)
-      (println "Clicked the first time")
+      (fx/run<! (fx/pset! txt "Next text"))
       (<! click-ch)
-      (println "Clicked again")
-      (fx/pset<! btn {:text "Done"})
+      (fx/run<!
+        (fx/pset! txt "Last text")
+        (fx/pset! btn {:text "Done"}))
       (println "Done listening to clicks"))
 
-      (fx/h-box btn)))
+    view))
 
 (fx/sandbox #'create-view)
 ```
 
 ## Usage
-
-To get all of fx-clj into your namespace quickly use a namespace
-declaration like this:
-```clojure
-(ns my-ns
-  (:require [fx-clj.core :as fx]))
-```
-
-To use fx-clj and core.async together, use something like this:
-```clojure
-(ns my-ns
-  (:require [fx-clj.core :as fx])
-  (:require [clojure.core.async :as async :refer [go go-loop chan <! >!])))
-```
 
 ### Interacting with the JavaFX application thread
 
@@ -88,7 +86,7 @@ thread - each providing slightly different asynchronous behavior:
 correspond to the behavior of `put!`, `<!` and `<!!`
 respectively.
 
-`run!` send a block of code to be run asynchronously on the JavaFX
+`run!` sends a block of code to be run asynchronously on the JavaFX
 application thread without blocking the caller. (It is effectively a
 thin wrapper around javafx.application.Platform/runLater.)
 
@@ -98,7 +96,7 @@ thin wrapper around javafx.application.Platform/runLater.)
 
 `run<!` *can only be used in a core.async* `go` *block!* It uses a
 core.async channel and `<!` to return the value of the code executed
-on the JavaFX application thread to the caller in `go` block. (This
+on the JavaFX application thread to the caller in the `go` block. (This
 blocks the `go` block, but does not block a thread.)
 
 ```clojure
@@ -109,7 +107,8 @@ blocks the `go` block, but does not block a thread.)
 
 `run<!!` uses a core.async channel and `<!!` to return the value of
 the code executed on the JavaFX application thread. It blocks the
-calling thread to return its value.
+calling thread until the block has completed and returns its value
+to the caller.
 
 ```clojure
 (let [res (run<!! (do-something))] ;; Calling thread blocked
@@ -123,7 +122,7 @@ The pset! function is used to modify JavaFX objects.
 The signature for `pset!` is the following:
 
 ```clojure
-(defn pset! [id-class-keyword? property-map? content-or-children*])
+(defn pset! [element id-class-keyword? property-map? content-or-children*])
 ```
 
 `id-class-kw?` (optional): a keyword representing a hiccup style ID and
@@ -142,15 +141,16 @@ then multiple children elements can be bound, otherwise only a single
 
 ### Creating JavaFX objects
 
-There is both a function based and hiccup-style API for creating
+There is both a function-based and hiccup-style API for creating
 JavaFX objects.
 
-See the API documentation for `fx-clj.elements` for a list of
+See the API documentation for `fx-clj.core` for a list of
 supported JavaFX objects.
 
 The syntax for all object creation functions and the hiccup like
-vectors, is almost identical to the pset syntax. It is basically a matter of 
-which style you prefer. All of the following are equivalent:
+vectors, is identical to the `pset!` syntax after the first argument (for the target element).
+Choosing between the different styles is basically a matter of preference.
+All of the following are equivalent:
 
 ```clojure
 (fx/pset! (Button.) :#my-btn.my-class {:on-action (fn [] (println "Clicked"))} "Click Me")
@@ -160,9 +160,8 @@ which style you prefer. All of the following are equivalent:
 (fx/compile-fx [:button#my-btn.my-class {:on-action (fn [] (println "Clicked"))}] "Click Me")
 ```
 
-
-Because the DefaultProperty of Button is `text`, it can be set as the
-argument after the property map.
+Because the `DefaultProperty` of `Button` is `text`, it can be set by passing a
+single argument after the property map.
 
 ## License
 
