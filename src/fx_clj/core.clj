@@ -34,24 +34,25 @@
 (import-all 'fx-clj.elements)
 (import-all 'fx-clj.core.transforms)
 
-(defn available-transforms
-  "Prints information on available transform functions for use
-  primarily in the [[at!]] function."
-  {:doc/format :markdown}
-  []
-  (doseq [xform @fx-clj.core.extensibility/defined-transforms]
-    (let [{:keys [doc]} (meta xform)]
-      (println xform)
-      (println doc)
-      (println))))
+(comment
+  (defn available-transforms
+    "Prints information on available transform functions for use
+    primarily in the [[at!]] function."
+    {:doc/format :markdown}
+    []
+    (doseq [xform @fx-clj.core.extensibility/defined-transforms]
+      (let [{:keys [doc]} (meta xform)]
+        (println xform)
+        (println doc)
+        (println))))
 
-(alter-meta!
-  #'fx-clj.core/at!
-  update-in [:doc]
-  (fn [doc]
-    (str doc
-         (str/join
-           "\n"
-           (for [xform @fx-clj.core.extensibility/defined-transforms]
-             (let [{:keys [ns name]} (meta xform)]
-               (str "  [[" name "]]")))))))
+  (alter-meta!
+    #'fx-clj.core/at!
+    update-in [:doc]
+    (fn [doc]
+      (str doc
+           (str/join
+             "\n"
+             (for [xform @fx-clj.core.extensibility/defined-transforms]
+               (let [{:keys [ns name]} (meta xform)]
+                 (str "  [[" name "]]"))))))))

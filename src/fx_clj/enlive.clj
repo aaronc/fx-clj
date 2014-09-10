@@ -20,13 +20,21 @@
   is supplied after node (instead of sel-xform-pairs), that transformation will
   be applied to the provided node.
 
-  Additional transforms can be registered (see the fx-clj.core.extensibility
-  namespace for details).
+  Available transforms include:
+    the property-map transform: a map that could be passed to [[pset!]]
+    [[add-class!]]
+    [[remove-class!]]
 
-  Example: `(at! my-node \"#my-element\" {:text \"Some text\"})`
+  Examples:
 
-  Available transforms (to see the most up to date list of transforms please
-  invoke the [[available-transforms]] function):
+  ```clojure
+  (at! my-node \"#my-element\" {:text \"Some text\"})
+  (at! my-node \"#my-element\" (add-class! \"some-class\"))
+  (at! my-node {:text \"Some text\"})
+  ```
+
+  Note: Additional transforms can be registered (see the
+  fx-clj.core.extensibility namespace for details).
   "
   {:doc/format :markdown}
   [node & sel-xform-pairs]
