@@ -10,4 +10,5 @@ pom.xml.asc
 *.iml
 .idea
 doc/
-~*
+*~
+\#*\#

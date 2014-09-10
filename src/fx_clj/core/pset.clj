@@ -1,7 +1,8 @@
 (ns ^:no-doc fx-clj.core.pset
   (:require
     [fx-clj.core.run]
-    [fx-clj.core.convert :refer [convert-arg]]
+    [fx-clj.core.convert]
+    [fx-clj.core.extensibility :refer [convert-arg]]
     [camel-snake-kebab.core :as csk]
     [clojure.string :as str])
   (:import (java.lang.reflect TypeVariable ParameterizedType)

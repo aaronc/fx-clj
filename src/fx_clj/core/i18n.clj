@@ -1,21 +1,29 @@
 (ns ^:no-doc fx-clj.core.i18n
   (:require
-    [fx-clj.core.convert :refer [convert-arg]])
+    [fx-clj.core.extensibility :refer [convert-arg]])
   (:import (javafx.fxml FXMLLoader)
            (java.util ResourceBundle Locale)))
 
-(def ^:dynamic ^ResourceBundle *resource-bundle* nil)
+(clojure.lang.Var/intern 'fx-clj.core
+                         (with-meta '*resource-bundle*
+                                    {:tag ResourceBundle
+                                     :dynamic true}))
 
-(def ^:dynamic ^Locale *locale* nil)
+(clojure.lang.Var/intern 'fx-clj.core
+                         (with-meta '*locale*
+                                    {:tag Locale
+                                     :dynamic true}))
 
-(defn get-resource-bundle [bundle]
-  (if (instance? ResourceBundle bundle)
-    bundle
-    (ResourceBundle/getBundle
-      bundle (or *locale* (Locale/getDefault))) ))
+(defn get-resource-bundle
+  ([bundle]
+   (get-resource-bundle
+     bundle (or fx-clj.core/*locale* (Locale/getDefault))))
+  ([bundle locale]
+   (if (instance? ResourceBundle bundle)
+     bundle (ResourceBundle/getBundle (name bundle) locale))))
 
 (defn with-resource-bundle* [bundle f]
-  (binding [*resource-bundle* (get-resource-bundle bundle)]
+  (binding [fx-clj.core/*resource-bundle* (get-resource-bundle bundle)]
     (f)))
 
 (defmacro with-resource-bundle
@@ -32,10 +40,10 @@
 (defn get-locale [locale]
   (if (instance? Locale locale)
     locale
-    (Locale/forLanguageTag locale)))
+    (Locale/forLanguageTag (name locale))))
 
 (defn with-locale* [locale f]
-  (binding [*locale* (get-locale locale)]
+  (binding [fx-clj.core/*locale* (get-locale locale)]
     (f)))
 
 (defmacro with-locale
@@ -47,8 +55,11 @@
     ~locale
     (fn [] ~@body)))
 
+(defn get-resource [res-name]
+  (.getObject fx-clj.core/*resource-bundle* (name res-name)))
+
 (defmethod convert-arg [String String] [_ s _]
   (if (and (.startsWith s FXMLLoader/RESOURCE_KEY_PREFIX)
-           *resource-bundle*)
-    (.getString *resource-bundle* (.substring s 1))
+           fx-clj.core/*resource-bundle*)
+    (.getString fx-clj.core/*resource-bundle* (.substring s 1))
     s))

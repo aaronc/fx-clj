@@ -1,6 +1,6 @@
 (ns fx-clj.core.convert
   (:require
-    [fx-clj.impl.bootstrap]
+    [fx-clj.core.extensibility :refer [convert-arg]]
     [fx-clj.util :as util]
     [clojure.core.async :refer [put!]]
     [camel-snake-kebab.core :as csk])
@@ -11,16 +11,6 @@
            (javafx.scene Node)
            (javax.swing JComponent)
            (javafx.embed.swing SwingNode)))
-
-(defmulti convert-arg
-  "Converts arguments sent to the pset! function and
-  other functions which take similar arguments.
-
-  Implementing methods take three parameters:
-  the requested type, the value to be converted, and an optional options map.
-  Methods dispatch on a vector of two Java Class instances:
-  the requested type to be converted to and the type to convert from."
-  (fn [requested-type value opts] [requested-type (type value)]))
 
 (defmethod convert-arg :default [_ v _] v)
 

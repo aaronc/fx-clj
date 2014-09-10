@@ -2,7 +2,7 @@
   (:require
     [fx-clj.core.pset :as pset]
     [fx-clj.impl.elements :refer [element-factories]]
-    [fx-clj.core.convert :refer [convert-arg]]
+    [fx-clj.core.extensibility :refer [convert-arg]]
     [camel-snake-kebab.core :as csk]))
 
 (def ^{:doc "Regular expression that parses a CSS-style id and class from an element name.
