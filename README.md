@@ -120,33 +120,27 @@ calling thread to return its value.
 
 ### Modifying JavaFX objects
 
-The pset macros are used to modify JavaFX objects. Like the run
-macros, there are 3 variants: `pset!`, `pset<!`, and `pset<!!` which
-have the same async behavior. Note: In the case of the pset macros,
-this behavior is more for coordination between
-processes rather than for getting any actual return value (these
-macros return the value they were passed except that when `pset!` is called
-from a thread other than the JavaFX application thread it runs
-asynchronously without blocking the caller and returns `nil`).
-
-TODO: maybe pset should always return `nil`??
+The pset! function is used to modify JavaFX objects.
 
 The signature for `pset!` is the following:
 
 ```clojure
-(defn pset! [id-class-keyword? property-map? children-content*])
+(defn pset! [id-class-keyword? property-map? content-or-children*])
 ```
 
-`id-class-keyword?`: an *optional* keyword parameter taking the form
-of :#my-id.my-class.my-class1 that will set the node's id and
-styleClass properties to the specified values.
+`id-class-kw?` (optional): a keyword representing a hiccup style ID and
+classes (i.e. `:#some-id.some-class.another-class`).
 
-`property-map?`: an *optional* map of properties to set on the object.
+`property-map?` (optional): a map of property keys and setters. Keys can be
+kebab-case keywords corresponding to JavaFX bean properties. Values are
+converted using `clojurefx.core.convert/convert-arg`. If a value is an
+instance of ObservableValue (or is converted to one),
+it will be bound to the property.
 
-`children-content*`: 0 or more items to be set on the objects
-DefaultProperty. If the default property is a List property (like
-children or items) there can be any number of elements. If it is a
-property taking a singular value (like content), there can be only one element.
+`content-or-children*` (zero or more): element or elements to be bound to the
+JavaFX element's DefaultProperty. If the DefaultProperty is a list property
+then multiple children elements can be bound, otherwise only a single
+'content' element can be bound.
 
 ### Creating JavaFX objects
 
