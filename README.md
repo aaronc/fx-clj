@@ -1,4 +1,4 @@
-**[Guide](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[Source](http://github.com/aaronc/fx-clj)** | **[License](https://raw.githubusercontent.com/aaronc/fx-clj/master/LICENSE)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)**
+**[Guide](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[Source](http://github.com/aaronc/fx-clj)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)** | **[License](https://raw.githubusercontent.com/aaronc/fx-clj/master/LICENSE)**
 
 [![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
@@ -86,7 +86,7 @@ thread - each providing slightly different asynchronous behavior:
 correspond to the behavior of `put!`, `<!` and `<!!`
 respectively.
 
-`run!` send a block of code to be run asynchronously on the JavaFX
+`run!` sends a block of code to be run asynchronously on the JavaFX
 application thread without blocking the caller. (It is effectively a
 thin wrapper around javafx.application.Platform/runLater.)
 
@@ -96,7 +96,7 @@ thin wrapper around javafx.application.Platform/runLater.)
 
 `run<!` *can only be used in a core.async* `go` *block!* It uses a
 core.async channel and `<!` to return the value of the code executed
-on the JavaFX application thread to the caller in `go` block. (This
+on the JavaFX application thread to the caller in the `go` block. (This
 blocks the `go` block, but does not block a thread.)
 
 ```clojure
@@ -107,7 +107,8 @@ blocks the `go` block, but does not block a thread.)
 
 `run<!!` uses a core.async channel and `<!!` to return the value of
 the code executed on the JavaFX application thread. It blocks the
-calling thread to return its value.
+calling thread until the block has completed and returns its value
+to the caller.
 
 ```clojure
 (let [res (run<!! (do-something))] ;; Calling thread blocked
@@ -121,7 +122,7 @@ The pset! function is used to modify JavaFX objects.
 The signature for `pset!` is the following:
 
 ```clojure
-(defn pset! [id-class-keyword? property-map? content-or-children*])
+(defn pset! [element id-class-keyword? property-map? content-or-children*])
 ```
 
 `id-class-kw?` (optional): a keyword representing a hiccup style ID and
@@ -140,15 +141,16 @@ then multiple children elements can be bound, otherwise only a single
 
 ### Creating JavaFX objects
 
-There is both a function based and hiccup-style API for creating
+There is both a function-based and hiccup-style API for creating
 JavaFX objects.
 
-See the API documentation for `fx-clj.elements` for a list of
+See the API documentation for `fx-clj.core` for a list of
 supported JavaFX objects.
 
 The syntax for all object creation functions and the hiccup like
-vectors, is almost identical to the pset syntax. It is basically a matter of 
-which style you prefer. All of the following are equivalent:
+vectors, is identical to the `pset!` syntax after the first argument (for the target element).
+Choosing between the different styles is basically a matter of preference.
+All of the following are equivalent:
 
 ```clojure
 (fx/pset! (Button.) :#my-btn.my-class {:on-action (fn [] (println "Clicked"))} "Click Me")
@@ -158,9 +160,8 @@ which style you prefer. All of the following are equivalent:
 (fx/compile-fx [:button#my-btn.my-class {:on-action (fn [] (println "Clicked"))}] "Click Me")
 ```
 
-
-Because the DefaultProperty of Button is `text`, it can be set as the
-argument after the property map.
+Because the `DefaultProperty` of `Button` is `text`, it can be set by passing a
+single argument after the property map.
 
 ## License
 
