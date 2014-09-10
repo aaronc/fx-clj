@@ -1,4 +1,4 @@
-(ns fx-clj.core.convert
+(ns ^:no-doc fx-clj.core.convert
   (:require
     [fx-clj.core.extensibility :refer [convert-arg]]
     [fx-clj.util :as util]

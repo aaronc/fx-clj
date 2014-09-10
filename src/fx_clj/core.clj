@@ -10,7 +10,9 @@
     [fx-clj.core.i18n]
     [fx-clj.util]
     [fx-clj.sandbox]
-    [fx-clj.core.extensibility]))
+    [fx-clj.core.transforms]
+    [fx-clj.core.extensibility]
+    [clojure.string :as str]))
 
 (import-vars
   [fx-clj.core.run run! run<! run<!!]
@@ -23,16 +25,33 @@
    get-resource-bundle get-locale get-resource]
   [fx-clj.util event-handler callback])
 
-(eval
-  `(potemkin/import-vars [fx-clj.elements
-      ~@(keys (ns-publics (find-ns 'fx-clj.elements)))]))
+(defn import-all [ns-sym]
+  (eval
+    `(potemkin/import-vars
+       [~ns-sym
+       ~@(keys (ns-publics (find-ns ns-sym)))])))
+
+(import-all 'fx-clj.elements)
+(import-all 'fx-clj.core.transforms)
 
 (defn available-transforms
   "Prints information on available transform functions for use
-  primarily in the at! function."
+  primarily in the [[at!]] function."
+  {:doc/format :markdown}
   []
   (doseq [xform @fx-clj.core.extensibility/defined-transforms]
     (let [{:keys [doc]} (meta xform)]
       (println xform)
       (println doc)
       (println))))
+
+(alter-meta!
+  #'fx-clj.core/at!
+  update-in [:doc]
+  (fn [doc]
+    (str doc
+         (str/join
+           "\n"
+           (for [xform @fx-clj.core.extensibility/defined-transforms]
+             (let [{:keys [ns name]} (meta xform)]
+               (str "  [[" name "]]")))))))

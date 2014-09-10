@@ -20,20 +20,18 @@
   is supplied after node (instead of sel-xform-pairs), that transformation will
   be applied to the provided node.
 
-  The only transform supported by default is the property map  transform
-  (a property map that could be passed to pset!). Please invoke the
-  [[available-transforms]] function to see what other transforms may be
-  available.
+  Additional transforms can be registered (see the fx-clj.core.extensibility
+  namespace for details).
 
-  Example: (at! my-node \"#my-element\" {:text \"Some text\"})
+  Example: `(at! my-node \"#my-element\" {:text \"Some text\"})`
 
-  Note: additional transforms can be registered (see the
-  fx-clj.core.extensibility namespace for details.
+  Available transforms (to see the most up to date list of transforms please
+  invoke the [[available-transforms]] function):
   "
   {:doc/format :markdown}
   [node & sel-xform-pairs]
   (if (= 1 (count sel-xform-pairs))
-    (invoke-transform node (first sel-xform-pairs))
+    (do-transform node (first sel-xform-pairs))
     (doseq [[selector xform] (partition 2 sel-xform-pairs)]
       (invoke-transform node selector xform))))
 
