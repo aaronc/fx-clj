@@ -7,10 +7,12 @@ A Clojure library for JavaFX with the following goals:
 - Provide convenience functions for creating and modifying JavaFX
   objects without attempting to completely hide the JavaFX API
 - Work with **core.async** out of the box
-- Provide support for creating JavaFX functions with both a function
-  based - `(fx/h-box (fx/button "Hello World"))` - and hiccup-like API -
+- Provide support for creating JavaFX objects with both a function
+  based - `(fx/h-box (fx/button "Hello World"))` - and **hiccup-like** API -
   `(fx/compile-fx [:h-box [:button "Hello World"]])`.
-- Allow for setting JavaFX CSS from code and integrate with the garden CSS 
+- Provide an **enlive-like** API for modifying nodes (**for interacting with
+  FXML resources**)
+- Allow for setting JavaFX CSS from code and integrate with the **garden CSS**
   library
 
 ## Quick Start
@@ -130,7 +132,7 @@ TODO: maybe pset should always return `nil`??
 The signature for `pset!` is the following:
 
 ```clojure
-(defn pset! id-class-keyword? property-map? children-content*)
+(defn pset! [id-class-keyword? property-map? children-content*])
 ```
 
 `id-class-keyword?`: an *optional* keyword parameter taking the form

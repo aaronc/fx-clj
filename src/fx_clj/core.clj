@@ -4,6 +4,7 @@
     [fx-clj.core.run]
     [fx-clj.core.pset]
     [fx-clj.hiccup]
+    [fx-clj.enlive]
     [fx-clj.elements]
     [fx-clj.css]
     [fx-clj.sandbox]))
@@ -12,6 +13,7 @@
   [fx-clj.core.run run! run<! run<!!]
   [fx-clj.core.pset pset! pset<! pset<!!]
   [fx-clj.hiccup compile-fx]
+  [fx-clj.enlive at]
   [fx-clj.sandbox sandbox]
   [fx-clj.css set-global-css!])
 
