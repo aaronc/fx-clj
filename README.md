@@ -1,10 +1,8 @@
 **[Guide](http://documentup.com/aaronc/fx-clj)** | **[API docs](http://aaronc.github.io/fx-clj/)** | **[CHANGELOG](https://github.com/aaronc/fx-clj/releases)**
 
-```clojure
-[fx-clj "0.1.0-SNAPSHOT"]
-```
+[![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
-WORK IN PROGRESS. Not ready yet!
+Alpha quality: there may be lots of breaking changes.
 
 A Clojure library for JavaFX with the following goals:
 
