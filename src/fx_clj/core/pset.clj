@@ -191,10 +191,10 @@
   instance of ObservableValue (or is converted to one),
   it will be bound to the property.
 
-  content-or-children* (zeror more): element or elements to be bound to the
+  content-or-children* (zero or more): element or elements to be bound to the
   JavaFX element's DefaultProperty. If the DefaultProperty is a list property
   then multiple children elements can be bound, otherwise only a single
-  'content' element  can be bound."
+  'content' element or can be bound."
   {:arglists '([element id-class-kw? property-map? & content-or-children*])}
   [element & args]
   (fx-clj.core.pset/pset!* element args))
