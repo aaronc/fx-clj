@@ -1,4 +1,4 @@
-**[API docs][]** | **[CHANGELOG][]**
+**[API docs](http://aaronc.github.io/fx-clj/)**
 
 WORK IN PROGRESS. Not ready yet!
 
