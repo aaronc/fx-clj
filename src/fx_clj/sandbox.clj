@@ -21,7 +21,7 @@
   ;; By binding to a var,  my-refresh-fn can be  easily updated and reloaded
   ;; at the REPL"
 
-  [refresh-fn & {:keys [title] :or {title (str "Sandbox" (swap! auto-inc inc))}}]
+  [refresh-fn & {:keys [title maximized] :or {title (str "Sandbox" (swap! auto-inc inc))}}]
   (run<!!
     (let [scene (fx/scene (refresh-fn))
           stage (fx/stage)]
@@ -33,5 +33,6 @@
       (.setScene stage scene)
       (.initModality stage Modality/NONE)
       (pset! stage {:title title})
+      (when maximized (.setMaximized stage true))
       (.show stage)
       stage)))
