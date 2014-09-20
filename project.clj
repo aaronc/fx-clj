@@ -7,7 +7,9 @@
                  [org.clojure/core.async "0.1.338.0-5c5012-alpha"]
                  [camel-snake-kebab "0.2.4"]
                  [garden "1.2.1"]
-                 [potemkin "0.3.8"]]
+                 [potemkin "0.3.8"]
+                 [freactive "0.1.0-SNAPSHOT"]]
+  :java-source-paths ["src"]
   :profiles
   {:dev
     {:plugins

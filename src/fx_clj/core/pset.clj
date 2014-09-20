@@ -9,7 +9,9 @@
            (javafx.beans.value ObservableValue)
            (java.util Collection)
            (javafx.beans DefaultProperty)
-           (javafx.application Platform)))
+           (javafx.application Platform)
+           [clojure.lang IInvalidates IReactiveRef IRef]
+           [fx_clj.binding ObservableReactiveRef ObservableRef]))
 
 (defn- get-generic-interfaces [cls]
   (loop [ifaces #{}
@@ -53,11 +55,17 @@
         (catch Exception ex
           nil)))))
 
+(defn get-property [target pname]
+  (when-let [pmethod (lookup-property-method (class target) pname)]
+    (.invoke pmethod target nil)))
+
 (defn- property-closure-fn [pmethod ptype target value]
   (let [prop (.invoke pmethod target nil)
         value (convert-arg ptype value nil)]
     (cond
       (instance? ObservableValue value) (.bind prop value)
+      (instance? IReactiveRef value) (.bind prop (ObservableReactiveRef. value))
+      (instance? IRef value) (.bind prop (ObservableRef. value))
       :default (.setValue prop value))))
 
 (defn- make-property-closure [target-type pname]

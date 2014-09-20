@@ -13,6 +13,7 @@
     [fx-clj.sandbox]
     [fx-clj.core.transforms]
     [fx-clj.core.extensibility]
+    [fx-clj.core.binding]
     [clojure.string :as str]))
 
 (import-vars
@@ -24,7 +25,8 @@
   [fx-clj.css set-global-css!]
   [fx-clj.core.i18n with-locale with-resource-bundle
    get-resource-bundle get-locale get-resource]
-  [fx-clj.util event-handler callback lookup])
+  [fx-clj.util event-handler callback lookup]
+  [fx-clj.core.binding property-ref])
 
 (defn import-all [ns-sym]
   (eval
