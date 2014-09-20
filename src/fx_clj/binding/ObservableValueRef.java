@@ -45,7 +45,7 @@ public class ObservableValueRef<T> implements IReactiveRef {
         return this;
     }
 
-    @Override
+    //@Override
     public IPersistentMap getInvalidationWatches() {
         return invalidationWatches;
     }
