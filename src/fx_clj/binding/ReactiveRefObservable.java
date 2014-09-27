@@ -2,14 +2,13 @@ package fx_clj.binding;
 
 import clojure.lang.AFn;
 import clojure.lang.IReactiveRef;
-import clojure.lang.IRef;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 
-public class ObservableReactiveRef extends ObservableRef {
+public class ReactiveRefObservable extends RefObservable {
     private final IReactiveRef ref;
 
-    public ObservableReactiveRef(IReactiveRef ref) {
+    public ReactiveRefObservable(IReactiveRef ref) {
         super(ref);
         this.ref = ref;
     }
@@ -22,7 +21,7 @@ public class ObservableReactiveRef extends ObservableRef {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        listener.invalidated(ObservableReactiveRef.this);
+                        listener.invalidated(ReactiveRefObservable.this);
                     }
                 });
                 return null;

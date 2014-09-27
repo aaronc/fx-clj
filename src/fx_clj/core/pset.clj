@@ -11,7 +11,7 @@
            (javafx.beans DefaultProperty)
            (javafx.application Platform)
            [clojure.lang IInvalidates IReactiveRef IRef]
-           [fx_clj.binding ObservableReactiveRef ObservableRef]))
+           [fx_clj.binding ReactiveRefObservable RefObservable]))
 
 (defn- get-generic-interfaces [cls]
   (loop [ifaces #{}
@@ -64,8 +64,8 @@
         value (convert-arg ptype value nil)]
     (cond
       (instance? ObservableValue value) (.bind prop value)
-      (instance? IReactiveRef value) (.bind prop (ObservableReactiveRef. value))
-      (instance? IRef value) (.bind prop (ObservableRef. value))
+      (instance? IReactiveRef value) (.bind prop (ReactiveRefObservable. value))
+      (instance? IRef value) (.bind prop (RefObservable. value))
       :default (.setValue prop value))))
 
 (defn- make-property-closure [target-type pname]

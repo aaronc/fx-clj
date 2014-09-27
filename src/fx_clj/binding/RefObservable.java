@@ -7,10 +7,10 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class ObservableRef implements ObservableValue<Object> {
+public class RefObservable implements ObservableValue<Object> {
     private final IRef ref;
 
-    public ObservableRef(IRef ref) {
+    public RefObservable(IRef ref) {
         this.ref = ref;
     }
 
@@ -22,7 +22,7 @@ public class ObservableRef implements ObservableValue<Object> {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        listener.changed(ObservableRef.this, oldV, newV);
+                        listener.changed(RefObservable.this, oldV, newV);
                     }
                 });
                 return null;
@@ -48,7 +48,7 @@ public class ObservableRef implements ObservableValue<Object> {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        listener.invalidated(ObservableRef.this);
+                        listener.invalidated(RefObservable.this);
                     }
                 });
                 return null;
