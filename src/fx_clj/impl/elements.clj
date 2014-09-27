@@ -45,7 +45,7 @@
            (javafx.scene.image ImageView)
            (javafx.embed.swing SwingNode)
            (java.lang.reflect Modifier Constructor)
-           (javafx.stage PopupWindow Stage Popup)))
+           (javafx.stage PopupWindow Stage Popup DirectoryChooser FileChooser)))
 
 (def element-factories (atom {}))
 
@@ -110,6 +110,6 @@
 (register-classes window-classes)
 
 (def other-classes
-  [TreeItem])
+  [TreeItem FileChooser DirectoryChooser])
 
 (register-classes other-classes)
