@@ -5,13 +5,14 @@
     [fx-clj.core.extensibility :refer [convert-arg]]
     [camel-snake-kebab.core :as csk]
     [clojure.string :as str])
-  (:import (java.lang.reflect TypeVariable ParameterizedType)
+  (:import (java.lang.reflect TypeVariable ParameterizedType Method)
            (javafx.beans.value ObservableValue)
            (java.util Collection)
            (javafx.beans DefaultProperty)
            (javafx.application Platform)
            [clojure.lang IInvalidates IReactiveRef IRef]
-           [fx_clj.binding ReactiveRefObservable RefObservable]))
+           [fx_clj.binding ReactiveRefObservable RefObservable]
+           (java.beans PropertyDescriptor)))
 
 (defn- get-generic-interfaces [cls]
   (loop [ifaces #{}
@@ -102,14 +103,28 @@
 
 (defn- make-list-property-closure [target-type pname]
   (when-let [pmethod (lookup-list-property-method target-type pname)]
-    (let [ltype (.getReturnType pmethod)
-          ptype (get-property-type pmethod)]
-      (with-meta
-        (fn [target value]
-          (list-property-closure-fn pmethod ptype target value))
-        {:property-type ltype
-         :type ::property-list-closure
-         :element-type ptype}))))
+    (let [ltype (.getReturnType pmethod)]
+      (when (isa? ltype java.util.List)
+        (let [ptype (get-property-type pmethod)]
+          (with-meta
+            (fn [target value]
+              (list-property-closure-fn pmethod ptype target value))
+            {:property-type ltype
+             :type          ::property-list-closure
+             :element-type  ptype}))))))
+
+(defn- make-setter-property-closure [target-type pname]
+  (try
+    (when-let [^PropertyDescriptor pdescriptor (PropertyDescriptor. (csk/->CamelCaseString pname) target-type)]
+      (let [^Class ptype (.getPropertyType pdescriptor)
+            ^Method setter (.getWriteMethod pdescriptor)]
+        (with-meta
+          (fn [target value]
+            (.invoke setter target (into-array Object [(convert-arg ptype value nil)])))
+          {:property-type ptype
+           :type          ::setter-property-closure})))
+    (catch Throwable ex
+      nil)))
 
 (def ^:private lookup-property-closure
   (memoize
@@ -117,6 +132,7 @@
       (or
         (make-property-closure target-type pname)
         (make-list-property-closure target-type pname)
+        (make-setter-property-closure target-type pname)
         (throw (ex-info (str "Can't find property " pname " for type " target-type)
                         {:target-type target-type
                          :property-name pname}))))))

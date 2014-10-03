@@ -26,7 +26,7 @@
                                  SeparatorMenuItem Slider SplitMenuButton
                                  SplitPane Tab TableCell TableColumn
                                  TableColumnBase TableRow TableView TabPane
-                                 TextArea TreeItem)
+                                 TextArea TreeItem ToggleGroup)
            (javafx.scene.chart BarChart Axis AreaChart BubbleChart CategoryAxis
                                Chart XYChart ValueAxis PieChart NumberAxis
                                LineChart ScatterChart StackedAreaChart
@@ -110,6 +110,6 @@
 (register-classes window-classes)
 
 (def other-classes
-  [TreeItem FileChooser DirectoryChooser])
+  [TreeItem FileChooser DirectoryChooser ToggleGroup])
 
 (register-classes other-classes)

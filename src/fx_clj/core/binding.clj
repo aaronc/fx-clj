@@ -1,11 +1,13 @@
 (ns fx-clj.core.binding
   (:require
     [fx-clj.core.pset :as pset]
+    [fx-clj.core.extensibility :refer [convert-arg]]
     [freactive.core :as r])
   (:import
     [fx_clj.binding ObservableValueRef ReactiveRefObservable]
     (javafx.beans.value ObservableValue)
-    (clojure.lang IDeref IReactiveLookup)))
+    (clojure.lang IDeref IReactiveLookup)
+    (javafx.beans.property Property)))
 
 (defn property-ref [target property-name]
   (let [prop (pset/get-property target property-name)]
@@ -30,3 +32,21 @@
           :default
           (r/reactive (getter target)))))))
 
+;(defrecord BindingClosure [func]
+;  clojure.lang.IFn
+;  (invoke [this lhs]
+;    (func lhs)))
+;
+;(defn bind<-
+;  ([^Property lhs rhs]
+;   (let [rhs (convert-arg ObservableValue rhs nil)]
+;     (.bind lhs rhs)))
+;  ([rhs]
+;   (BindingClosure. (fn [lhs] (bind< lhs rhs)))))
+;
+;(defn bind<->
+;  ([^Property lhs rhs]
+;   (let [rhs (convert-arg ObservableValue rhs nil)]
+;     (.bind lhs rhs)))
+;  ([rhs]
+;   (BindingClosure. (fn [lhs] (bind< lhs rhs)))))
