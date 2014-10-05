@@ -4,6 +4,7 @@ import clojure.lang.IReactiveAtom;
 import clojure.lang.IReactiveRef;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
@@ -44,22 +45,25 @@ public class ReactiveAtomObservable extends ReactiveRefObservable implements Pro
 
     @Override
     public void unbind() {
-
+        if(other != null) {
+            other.removeListener(listener);
+            other = null;
+        }
     }
 
     @Override
     public boolean isBound() {
-        return false;
+        return other != null;
     }
 
     @Override
     public void bindBidirectional(Property<Object> other) {
-
+        Bindings.bindBidirectional(this, other);
     }
 
     @Override
     public void unbindBidirectional(Property<Object> other) {
-
+        Bindings.unbindBidirectional(this, other);
     }
 
     @Override
@@ -92,6 +96,6 @@ public class ReactiveAtomObservable extends ReactiveRefObservable implements Pro
     }
 
     private void markInvalid() {
-
+        setValue(other.getValue());
     }
 }
