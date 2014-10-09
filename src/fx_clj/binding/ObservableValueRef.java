@@ -4,8 +4,10 @@ import clojure.lang.*;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.WeakInvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.concurrent.CompletableFuture;
@@ -17,6 +19,16 @@ public class ObservableValueRef<T> implements IReactiveRef {
     private volatile IPersistentMap invalidationWatches = PersistentHashMap.EMPTY;
 
     private volatile IPersistentMap watches = PersistentHashMap.EMPTY;
+
+    private static class WeakInvalidationListenerWrapper {
+        private WeakInvalidationListenerWrapper(InvalidationListener listener, WeakInvalidationListener weakListener) {
+            this.listener = listener;
+            this.weakListener = weakListener;
+        }
+
+        InvalidationListener listener;
+        WeakInvalidationListener weakListener;
+    }
 
     public ObservableValueRef(ObservableValue<T> value) {
         this.value = value;
@@ -30,16 +42,18 @@ public class ObservableValueRef<T> implements IReactiveRef {
                 callback.invoke(key, ObservableValueRef.this);
             }
         };
-        invalidationWatches = invalidationWatches.assoc(key, listener);
-        value.addListener(listener);
+        WeakInvalidationListener weakListener = new WeakInvalidationListener(listener);
+        WeakInvalidationListenerWrapper wrapper = new WeakInvalidationListenerWrapper(listener, weakListener);
+        invalidationWatches = invalidationWatches.assoc(key, wrapper);
+        value.addListener(weakListener);
         return this;
     }
 
     @Override
     public clojure.lang.IInvalidates removeInvalidationWatch(Object key) {
-        Object listener = invalidationWatches.valAt(key);
-        if(listener != null) {
-            value.removeListener((InvalidationListener)listener);
+        Object wrapper = invalidationWatches.valAt(key);
+        if(wrapper != null) {
+            value.removeListener(((WeakInvalidationListenerWrapper)wrapper).weakListener);
             invalidationWatches = invalidationWatches.without(key);
         }
         return this;
@@ -65,6 +79,16 @@ public class ObservableValueRef<T> implements IReactiveRef {
         return watches;
     }
 
+    private static class WeakChangeListenerWrapper<T> {
+        private WeakChangeListenerWrapper(ChangeListener<? super T> listener, WeakChangeListener<? super T> weakListener) {
+            this.listener = listener;
+            this.weakListener = weakListener;
+        }
+
+        private ChangeListener<? super T> listener;
+        private WeakChangeListener<? super T> weakListener;
+    }
+
     @Override
     public IRef addWatch(Object key, IFn callback) {
         ChangeListener<? super T> changeListener = new ChangeListener<T>() {
@@ -73,16 +97,18 @@ public class ObservableValueRef<T> implements IReactiveRef {
                 callback.invoke(key, ObservableValueRef.this, oldValue, newValue);
             }
         };
-        watches = watches.assoc(key, changeListener);
-        value.addListener(changeListener);
+        WeakChangeListener<? super T> weakChangeListener = new WeakChangeListener<>(changeListener);
+        WeakChangeListenerWrapper<T> wrapper = new WeakChangeListenerWrapper<>(changeListener, weakChangeListener);
+        watches = watches.assoc(key, wrapper);
+        value.addListener(weakChangeListener);
         return this;
     }
 
     @Override
     public IRef removeWatch(Object key) {
-        Object listener = watches.valAt(key);
-        if(listener != null) {
-            value.removeListener((ChangeListener<? super T>)listener);
+        Object wrapper = watches.valAt(key);
+        if(wrapper != null) {
+            value.removeListener(((WeakChangeListenerWrapper<T>)wrapper).weakListener);
             watches = watches.without(key);
         }
         return this;
