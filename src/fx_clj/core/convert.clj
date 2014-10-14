@@ -10,7 +10,10 @@
            (javafx.collections ObservableList FXCollections)
            (javafx.scene Node)
            (javax.swing JComponent)
-           (javafx.embed.swing SwingNode)))
+           (javafx.embed.swing SwingNode)
+           (javafx.beans.property Property)
+           (clojure.lang IReactiveAtom)
+           (fx_clj.binding ReactiveAtomObservable)))
 
 (defmethod convert-arg :default [_ v _] v)
 
@@ -37,3 +40,6 @@
 (defmethod convert-arg [Node JComponent] [nt jc _]
   (doto (SwingNode.)
     (.setContent jc)))
+
+(defmethod convert-arg [Property IReactiveAtom] [_ a _]
+  (ReactiveAtomObservable. a))

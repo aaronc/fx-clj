@@ -60,6 +60,11 @@
   (when-let [pmethod (lookup-property-method (class target) pname)]
     (.invoke pmethod target nil)))
 
+(defrecord BindingClosure [func]
+  clojure.lang.IFn
+  (invoke [this lhs]
+    (func lhs)))
+
 (defn- property-closure-fn [pmethod ptype target value]
   (let [prop (.invoke pmethod target nil)
         value (convert-arg ptype value nil)]
@@ -67,6 +72,7 @@
       (instance? ObservableValue value) (.bind prop value)
       (instance? IReactiveRef value) (.bind prop (ReactiveRefObservable. value))
       (instance? IRef value) (.bind prop (RefObservable. value))
+      (instance? BindingClosure value) (value prop)
       :default (.setValue prop value))))
 
 (defn- make-property-closure [target-type pname]

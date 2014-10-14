@@ -32,21 +32,24 @@
           :default
           (r/reactive (getter target)))))))
 
-;(defrecord BindingClosure [func]
-;  clojure.lang.IFn
-;  (invoke [this lhs]
-;    (func lhs)))
-;
-;(defn bind<-
-;  ([^Property lhs rhs]
-;   (let [rhs (convert-arg ObservableValue rhs nil)]
-;     (.bind lhs rhs)))
-;  ([rhs]
-;   (BindingClosure. (fn [lhs] (bind< lhs rhs)))))
-;
-;(defn bind<->
-;  ([^Property lhs rhs]
-;   (let [rhs (convert-arg ObservableValue rhs nil)]
-;     (.bind lhs rhs)))
-;  ([rhs]
-;   (BindingClosure. (fn [lhs] (bind< lhs rhs)))))
+(defn bind<-
+  ([^Property lhs rhs]
+   (let [rhs (convert-arg ObservableValue rhs nil)]
+     (.bind lhs rhs)))
+  ([rhs]
+   (pset/->BindingClosure (fn [lhs] (bind<- lhs rhs)))))
+
+(defn bind<->
+  ([^Property lhs rhs]
+   (let [rhs (convert-arg Property rhs nil)]
+     (.bindBidirectional lhs rhs)))
+  ([rhs]
+   (pset/->BindingClosure (fn [lhs] (bind<-> lhs rhs)))))
+
+(defn bind->
+  ([^ObservableValue lhs rhs]
+   (let [rhs (convert-arg Property rhs nil)]
+     (.bind rhs lhs)))
+  ([rhs]
+   (pset/->BindingClosure (fn [lhs] (bind-> lhs rhs)))))
+

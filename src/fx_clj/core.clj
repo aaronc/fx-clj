@@ -26,7 +26,7 @@
   [fx-clj.core.i18n with-locale with-resource-bundle
    get-resource-bundle get-locale get-resource]
   [fx-clj.util event-handler callback lookup]
-  [fx-clj.core.binding property-ref observable-property])
+  [fx-clj.core.binding property-ref observable-property bind<- bind<-> bind->])
 
 (defn import-all [ns-sym]
   (eval
