@@ -12,7 +12,8 @@
            (javafx.application Platform)
            [clojure.lang IRef]
            [fx_clj.binding ReactiveRefObservable RefObservable]
-           (java.beans PropertyDescriptor)))
+           (java.beans PropertyDescriptor)
+           [freactive IReactiveRef]))
 
 (defn- get-generic-interfaces [cls]
   (loop [ifaces #{}
