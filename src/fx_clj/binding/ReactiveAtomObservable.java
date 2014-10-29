@@ -1,13 +1,11 @@
 package fx_clj.binding;
 
-import clojure.lang.IReactiveAtom;
-import clojure.lang.IReactiveRef;
+import freactive.IReactiveAtom;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
-import javafx.beans.value.WritableValue;
 
 import java.lang.ref.WeakReference;
 

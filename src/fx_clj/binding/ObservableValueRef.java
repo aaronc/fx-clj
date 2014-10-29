@@ -1,6 +1,9 @@
 package fx_clj.binding;
 
 import clojure.lang.*;
+import freactive.IInvalidates;
+import freactive.IReactiveRef;
+import freactive.Reactive;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -35,7 +38,7 @@ public class ObservableValueRef<T> implements IReactiveRef {
     }
 
     @Override
-    public clojure.lang.IInvalidates addInvalidationWatch(Object key, IFn callback) {
+    public freactive.IInvalidates addInvalidationWatch(Object key, IFn callback) {
         InvalidationListener listener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
@@ -50,7 +53,7 @@ public class ObservableValueRef<T> implements IReactiveRef {
     }
 
     @Override
-    public clojure.lang.IInvalidates removeInvalidationWatch(Object key) {
+    public IInvalidates removeInvalidationWatch(Object key) {
         Object wrapper = invalidationWatches.valAt(key);
         if(wrapper != null) {
             value.removeListener(((WeakInvalidationListenerWrapper)wrapper).weakListener);
@@ -105,6 +108,7 @@ public class ObservableValueRef<T> implements IReactiveRef {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public IRef removeWatch(Object key) {
         Object wrapper = watches.valAt(key);
         if(wrapper != null) {

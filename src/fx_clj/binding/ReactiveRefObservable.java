@@ -1,7 +1,7 @@
 package fx_clj.binding;
 
 import clojure.lang.AFn;
-import clojure.lang.IReactiveRef;
+import freactive.IReactiveRef;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 
