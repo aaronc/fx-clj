@@ -10,7 +10,7 @@
            (java.util Collection)
            (javafx.beans DefaultProperty)
            (javafx.application Platform)
-           [clojure.lang IInvalidates IReactiveRef IRef]
+           [clojure.lang IRef]
            [fx_clj.binding ReactiveRefObservable RefObservable]
            (java.beans PropertyDescriptor)))
 

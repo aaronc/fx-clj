@@ -12,8 +12,8 @@
            (javax.swing JComponent)
            (javafx.embed.swing SwingNode)
            (javafx.beans.property Property)
-           (clojure.lang IReactiveAtom)
-           (fx_clj.binding ReactiveAtomObservable)))
+           (fx_clj.binding ReactiveAtomObservable)
+           [freactive IReactiveAtom]))
 
 (defmethod convert-arg :default [_ v _] v)
 

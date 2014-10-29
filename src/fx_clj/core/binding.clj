@@ -6,8 +6,9 @@
   (:import
     [fx_clj.binding ObservableValueRef ReactiveRefObservable]
     (javafx.beans.value ObservableValue)
-    (clojure.lang IDeref IReactiveLookup)
-    (javafx.beans.property Property)))
+    (clojure.lang IDeref)
+    (javafx.beans.property Property)
+    [freactive IReactiveLookup]))
 
 (defn property-ref [target property-name]
   (let [prop (pset/get-property target property-name)]

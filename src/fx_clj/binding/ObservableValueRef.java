@@ -133,9 +133,7 @@ public class ObservableValueRef<T> implements IReactiveRef {
             });
             try {
                 return future.get();
-            } catch (InterruptedException e) {
-                throw new UndeclaredThrowableException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw new UndeclaredThrowableException(e);
             }
         }
