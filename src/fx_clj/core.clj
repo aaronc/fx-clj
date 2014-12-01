@@ -19,7 +19,7 @@
 (import-vars
   [fx-clj.core.run run! run<! run<!!]
   [fx-clj.core.pset pset!]
-  [fx-clj.hiccup compile-fx]
+  [fx-clj.hiccup compile-fx build]
   [fx-clj.enlive at!]
   [fx-clj.sandbox sandbox]
   [fx-clj.css set-global-css!]

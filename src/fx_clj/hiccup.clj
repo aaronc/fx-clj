@@ -36,3 +36,4 @@
 (defmethod convert-arg [Object clojure.lang.PersistentVector] [_ v opts]
   (compile-fx v))
 
+(def build compile-fx)
