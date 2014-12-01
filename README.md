@@ -14,8 +14,8 @@ A Clojure library for JavaFX 8 with the following goals:
 - Provide support for creating JavaFX objects with both a function
   based - `(fx/h-box (fx/button "Hello World"))` - and **hiccup-like** API -
   `(fx/compile-fx [:h-box [:button "Hello World"]])`.
-- Provide an **enlive-like** API for modifying nodes (**for interacting with
-  FXML resources**)
+- Provide an API for modifying nodes with selectors (sort of like enlive) **for interacting with
+  FXML resources**
 - Allow for setting JavaFX CSS from code and integrate with the **garden CSS**
   library
 - Helper functions for **i18n**
@@ -153,15 +153,19 @@ Choosing between the different styles is basically a matter of preference.
 All of the following are equivalent:
 
 ```clojure
-(fx/pset! (Button.) :#my-btn.my-class {:on-action (fn [] (println "Clicked"))} "Click Me")
-
 (fx/button :#my-btn.my-class {:on-action (fn [] (println "Clicked"))} "Click Me")
 
 (fx/compile-fx [:button#my-btn.my-class {:on-action (fn [] (println "Clicked"))}] "Click Me")
+
+(fx/pset! (Button.) :#my-btn.my-class {:on-action (fn [] (println "Clicked"))} "Click Me")
+
 ```
 
 Because the `DefaultProperty` of `Button` is `text`, it can be set by passing a
 single argument after the property map.
+
+Elements can also be defined using FXML and modified with a selector-based transform (sort of like in enlive) using the `at` function. Right now only ID-based selectors are supported. `pset!` based transforms are supported as well as a limited number of other transforms. See the [test example](https://github.com/aaronc/fx-clj/blob/master/test/fx_clj/example_enlive.clj) as well as the documentation for [`at`](http://aaronc.github.io/fx-clj/fx-clj.core.html#var-at).
+
 
 ## License
 
