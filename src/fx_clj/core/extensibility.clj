@@ -62,3 +62,8 @@
   Takes two arguments: a node and a requested transform.
   Dispatches on the type of the transform."
   (fn [node transform] (type transform)))
+
+(def property-plugins (atom nil))
+
+(defn register-property-plugin! [ns handler]
+  (swap! property-plugins assoc (name ns) handler))

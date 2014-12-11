@@ -2,7 +2,7 @@
   (:require
     [fx-clj.core.run :as run]
     [fx-clj.core.convert]
-    [fx-clj.core.extensibility :refer [convert-arg]]
+    [fx-clj.core.extensibility :refer [convert-arg] :as ext]
     [camel-snake-kebab.core :as csk]
     [clojure.string :as str])
   (:import (java.lang.reflect TypeVariable ParameterizedType Method)
@@ -185,7 +185,11 @@
 (defn do-pset!* [node prop-map children default-prop-closure]
   (when prop-map
     (doseq [[p v] prop-map]
-      ((lookup-property-closure (class node) p) node v)))
+      (if-let [p-ns (when (instance? clojure.lang.Named p) (namespace p))]
+        (let [plugin (get @ext/property-plugins p-ns)]
+          (assert plugin (str "No property plugin registered for namespace" p-ns))
+          (plugin node (name p) v))
+        ((lookup-property-closure (class node) p) node v))))
   (when children
     (assert default-prop-closure (str "No default property for: " node))
     (default-prop-closure node children))
