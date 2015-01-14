@@ -3,7 +3,8 @@
     [fx-clj.core.run :as run]
     [fx-clj.core.convert]
     [fx-clj.core.extensibility :refer [convert-arg] :as ext]
-    [camel-snake-kebab.core :as csk]
+    ;;[camel-snake-kebab.core :as csk]
+    [org.tobereplaced.lettercase :as lettercase]
     [clojure.string :as str])
   (:import (java.lang.reflect TypeVariable ParameterizedType Method)
            (javafx.beans.value ObservableValue)
@@ -52,7 +53,7 @@
     (fn [target-type pname]
       (try
         (.getMethod target-type
-                    (str (csk/->camelCaseString pname) "Property")
+                    (str (lettercase/mixed-name pname) "Property")
                     nil)
         (catch Exception ex
           nil)))))
@@ -90,7 +91,7 @@
     (fn [target-type pname]
       (try
         (.getMethod target-type
-                    (str "get" (csk/->CamelCaseString pname))
+                    (str "get" (lettercase/capitalized-name pname))
                     nil)
         (catch Exception ex
           nil)))))
@@ -122,7 +123,7 @@
 
 (defn- make-setter-property-closure [target-type pname]
   (try
-    (when-let [^PropertyDescriptor pdescriptor (PropertyDescriptor. (csk/->CamelCaseString pname) target-type)]
+    (when-let [^PropertyDescriptor pdescriptor (PropertyDescriptor. (lettercase/capitalized-name pname) target-type)]
       (let [^Class ptype (.getPropertyType pdescriptor)
             ^Method setter (.getWriteMethod pdescriptor)]
         (with-meta

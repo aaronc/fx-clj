@@ -5,7 +5,9 @@
     [fx-clj.core.pset :as pset]
     [fx-clj.core.run :as run]
     [fx-clj.impl.util :refer [javadoc-link]]
-    [camel-snake-kebab.core :as csk]))
+    ;;   [camel-snake-kebab.core :as csk]
+    [org.tobereplaced.lettercase :as lettercase]
+    ))
 
 (def ^:private
   default-arglists '([id-class-kw? property-map? & content-or-children*]))
@@ -27,7 +29,7 @@
 
         closure (create-element-closure cls factory)
 
-        sym (csk/->kebab-case-symbol ename)
+        sym (lettercase/lower-hyphen-symbol (name ename))
 
         sym (with-meta sym
                        {:doc doc-string

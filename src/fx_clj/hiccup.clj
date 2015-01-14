@@ -3,7 +3,9 @@
     [fx-clj.core.pset :as pset]
     [fx-clj.impl.elements :refer [element-factories]]
     [fx-clj.core.extensibility :refer [convert-arg]]
-    [camel-snake-kebab.core :as csk]))
+    ;;[camel-snake-kebab.core :as csk]
+    [org.tobereplaced.lettercase :as lettercase]
+    ))
 
 (def ^{:doc "Regular expression that parses a CSS-style id and class from an element name.
              From hiccup.compiler: https://github.com/weavejester/hiccup/blob/master/src/hiccup/compiler.clj
@@ -14,7 +16,7 @@
 (def ^:private get-elem-factory
   (memoize
     (fn [elem-name]
-      (get @element-factories (csk/->CamelCase elem-name)))))
+      (get @element-factories (lettercase/capitalized-name elem-name)))))
 
 (defn hiccup-construct [elem-kw]
   (assert (keyword? elem-kw) (str elem-kw " must be a keyword when using hiccup style construction"))

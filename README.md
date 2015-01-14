@@ -2,7 +2,7 @@
 
 [![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
-Alpha quality: there may be lots of breaking changes. JDK 8 required.
+Beta quality - the API is pretty stable and has gotten a fair amount of testing. JDK 8 required.
 
 ## Overview
 
@@ -19,6 +19,7 @@ A Clojure library for JavaFX 8 with the following goals:
 - Allow for setting JavaFX CSS from code and integrate with the **garden CSS**
   library
 - Helper functions for **i18n**
+- Provide **data binding to reactive atoms, cursors and expressions** (via [freactive.core](https://github.com/aaronc/freactive.core)).
 
 ## Quick Start
 
@@ -165,6 +166,10 @@ Because the `DefaultProperty` of `Button` is `text`, it can be set by passing a
 single argument after the property map.
 
 Elements can also be defined using FXML and modified with a selector-based transform (sort of like in enlive) using the `at` function. Right now only ID-based selectors are supported. `pset!` based transforms are supported as well as a limited number of other transforms. See the [test example](https://github.com/aaronc/fx-clj/blob/master/test/fx_clj/example_enlive.clj) as well as the documentation for [`at`](http://aaronc.github.io/fx-clj/fx-clj.core.html#var-at).
+
+### Data Binding
+
+The reactive atoms, expressions and cursors from [freactive.core](https://github.com/aaronc/freactive.core) can be bound to any JavaFX property. Unfortunately not all of this capability is thoroughly documented - see the `fx-clj.core.binding` namespace (which is all pulled into `fx-clj.core` by `potemkin`) for more info.
 
 
 ## License

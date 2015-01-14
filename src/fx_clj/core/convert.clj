@@ -3,7 +3,8 @@
     [fx-clj.core.extensibility :refer [convert-arg]]
     [fx-clj.util :as util]
     [clojure.core.async :refer [put!]]
-    [camel-snake-kebab.core :as csk])
+    ;;[camel-snake-kebab.core :as csk]
+    [org.tobereplaced.lettercase :as lettercase])
   (:import (javafx.event EventHandler)
            (clojure.core.async.impl.channels ManyToManyChannel)
            (javafx.util Callback)
@@ -27,7 +28,7 @@
   (util/callback* f))
 
 (defmethod convert-arg [Enum clojure.lang.Keyword] [enum kw _]
-  (Enum/valueOf enum (csk/->SNAKE_CASE_STRING kw)))
+  (Enum/valueOf enum (lettercase/upper-underscore-name kw)))
 
 (defmethod convert-arg [ObservableList clojure.lang.Sequential]
            [_ v {:keys [element-type] :or {element-type Object}}]
