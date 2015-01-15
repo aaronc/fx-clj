@@ -1,4 +1,4 @@
-(defproject fx-clj "0.2.0-SNAPSHOT"
+(defproject fx-clj "0.2.0-alpha1"
   :description "A Clojure library for JavaFX"
   :url "https://github.com/aaronc/fx-clj"
   :license {:name "Eclipse Public License"
