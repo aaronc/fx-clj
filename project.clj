@@ -8,7 +8,7 @@
                  [garden "1.2.1"]
                  [potemkin "0.3.8"]
                  [org.tobereplaced/lettercase "1.0.0"]
-                 [freactive "0.1.0-SNAPSHOT"]]
+                 [freactive.core "0.2.0-alpha1"]]
   :java-source-paths ["src"]
   :javac-options ["-Xlint:unchecked"]
   :profiles

@@ -2,8 +2,9 @@ package fx_clj.binding;
 
 import clojure.lang.*;
 import freactive.IInvalidates;
+import freactive.IReactive;
 import freactive.IReactiveRef;
-import freactive.Reactive;
+import freactive.ReactiveExpression;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -120,7 +121,7 @@ public class ObservableValueRef<T> implements IReactiveRef {
 
     @Override
     public Object deref() {
-        Reactive.registerDep(this);
+        ReactiveExpression.registerDep(this);
         if(Platform.isFxApplicationThread())
             return value.getValue();
         else {
@@ -137,5 +138,10 @@ public class ObservableValueRef<T> implements IReactiveRef {
                 throw new UndeclaredThrowableException(e);
             }
         }
+    }
+
+    @Override
+    public BindingInfo getBindingInfo() {
+        return IReactive.IInvalidatesBindingInfo;
     }
 }
