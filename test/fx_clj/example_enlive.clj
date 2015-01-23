@@ -7,7 +7,7 @@
 (defn test-view []
   (let [view (FXMLLoader/load
                (io/resource "fx_clj/example_enlive.fxml"))]
-    (fx/at view
+    (fx/at! view
            "#my-btn"
            {:on-action
              (fn [e] (println "Got clicked!"))})
