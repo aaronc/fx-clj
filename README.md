@@ -2,7 +2,7 @@
 
 [![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
-Beta quality - the API is pretty stable and has gotten a fair amount of testing. JDK 8 required and at least Clojure 1.7.0-alpha3 required.
+Beta quality - the API is pretty stable and has gotten a fair amount of testing. JDK 8 and at least Clojure 1.7.0-alpha3 are required.
 
 ## Overview
 
