@@ -2,7 +2,7 @@
 
 [![Clojars Project](http://clojars.org/fx-clj/latest-version.svg)](http://clojars.org/fx-clj)
 
-Beta quality - the API is pretty stable and has gotten a fair amount of testing. JDK 8 required.
+Beta quality - the API is pretty stable and has gotten a fair amount of testing. JDK 8 required and at least Clojure 1.7.0-alpha3 required.
 
 ## Overview
 
@@ -165,7 +165,7 @@ All of the following are equivalent:
 Because the `DefaultProperty` of `Button` is `text`, it can be set by passing a
 single argument after the property map.
 
-Elements can also be defined using FXML and modified with a selector-based transform (sort of like in enlive) using the `at` function. Right now only ID-based selectors are supported. `pset!` based transforms are supported as well as a limited number of other transforms. See the [test example](https://github.com/aaronc/fx-clj/blob/master/test/fx_clj/example_enlive.clj) as well as the documentation for [`at`](http://aaronc.github.io/fx-clj/fx-clj.core.html#var-at).
+Elements can also be defined using FXML and modified with a selector-based transform (sort of like in enlive) using the `at!` function. Right now only ID-based selectors are supported. `pset!` based transforms are supported as well as a limited number of other transforms. See the [test example](https://github.com/aaronc/fx-clj/blob/master/test/fx_clj/example_enlive.clj).
 
 ### Data Binding
 
