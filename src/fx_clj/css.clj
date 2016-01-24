@@ -59,7 +59,7 @@
   vector that can be processed by the garden css library."
   [css]
   (let [css (->css css)
-         url (URL. (str prefix ":global-" (swap! auto-inc inc)))
+        url (URL. (str prefix ":global-" (swap! auto-inc inc)))
         to-remove (filter #(re-matches global-url-re (str %)) (keys @css-strings))]
     (swap! css-strings (fn [x] (apply dissoc x to-remove)))
     (doseq [x to-remove] (remove-global-stylesheet! x))
